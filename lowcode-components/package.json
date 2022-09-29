@@ -2,15 +2,18 @@
   "name": "lowcode-components",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "main": "./src/index.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "global": "^4.4.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.1",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",
