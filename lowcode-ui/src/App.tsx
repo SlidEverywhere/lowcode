@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import {HelloWorld} from 'lowcode-components'
+import {Hello} from 'lowcode-components'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div className="App">
-      <HelloWorld/>
+      <Hello/>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo" alt="Vite logo" />

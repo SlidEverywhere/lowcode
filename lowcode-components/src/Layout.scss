@@ -1,0 +1,92 @@
+*{
+    padding: 0;
+    margin: 0;
+} 
+#root{
+    height: 100vh;
+    width: 100vw;
+    background-color: #eee;
+    box-sizing: border-box;
+    // overflow: auto;
+}
+ul,ol{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+    color: #666;
+}
+.App{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    header{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #FFE4C4;
+    background-image: linear-gradient( 135deg, #FEB692 10%, #EA5455 100%);
+}
+main{
+    flex: 1;
+    display: flex;
+    nav{
+        width: 250px;
+        height: 100%;
+        background-color: #fff;
+        box-shadow:
+        8.5px 0px 1.5px rgba(0, 0, 0, 0.04),
+        15.7px 0px 3.3px rgba(0, 0, 0, 0.058),
+        22px 0px 5.5px rgba(0, 0, 0, 0.072),
+        29.7px 0px 9.5px rgba(0, 0, 0, 0.09),
+        60px 0px 26px rgba(0, 0, 0, 0.13);
+
+        ul{
+            margin-top: 10px;
+            li{
+                box-shadow:0px 2px 2px rgba(0, 0, 0, 0.15);
+                // background-image: linear-gradient( 135deg, #FEB692 10%, #EA5455 100%);
+                margin-top: 5px;
+                .link{
+                    
+                    display: block;
+                    height:60px ;
+                    width: 100%;
+                    color: #fff;
+                    line-height: 60px;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+    .content{
+        flex: 1;
+        padding: 20px;    
+        .out-content{
+            height: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            background-color: #fff;
+            // 边框
+            border-top-color: rgb(65, 64, 62);
+            border-top-style: dotted;
+            border-top-width: 5px;
+            border-right-color: rgb(65, 64, 62);
+            border-right-style: dotted;
+            border-right-width: 5px;
+            border-bottom-color: rgb(65, 64, 62);
+            border-bottom-style: dotted;
+            border-bottom-width: 5px;
+            border-left-color: rgb(65, 64, 62);
+            border-left-style: dotted;
+            border-left-width: 5px;
+            border-image-source: initial;
+            border-image-slice: initial;
+            border-image-width: initial;
+            border-image-outset: initial;
+            border-image-repeat: initial;
+        }
+    }
+}
+}
