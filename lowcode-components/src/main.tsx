@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './Layout.scss'
+import 'antd/dist/antd.css'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { MyRouteType } from './types/router'
 const components = import.meta.glob('./components/**/*.tsx')
