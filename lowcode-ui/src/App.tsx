@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import {Hello} from 'lowcode-components'
+import { HashRouter } from 'react-router-dom'
+import { routes, onRouteBefore } from './router'
+import RouterWaiter from 'react-router-waiter'
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useStore } from './hooks/storeHook'
+import api from './api/index'
+import { useState, useEffect } from 'react'
+import { getRoutePath } from './utils/appTools'
+
+function App () {
+  const store = useStore()
+  const { userStore } = store
+
+  const [isRender, setIsRender] = useState(false)
+
+  useEffect(() => {
+    console.log('---update---', document.lastModified)
+    // console.log('store', store)
+
+    // 判断路由是否可渲染
+    const path = getRoutePath()
+    if (['/login'].includes(path)) {
+      setIsRender(true)
+    } else {
+      if (!userStore.isGotUserInfo) {
+        api.getUserInfo().then((res: any) => {
+          const data = res.data || {}
+          userStore.setUserInfo(data)
+          setIsRender(true)
+        })
+      }
+    }
+  }, [])
 
   return (
-    <div className="App">
-      <Hello/>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <HashRouter>
+      {isRender
+        ? (
+        <RouterWaiter
+          routes={routes}
+          onRouteBefore={onRouteBefore}
+        />
+          )
+        : null}
+    </HashRouter>
   )
 }
 
 export default App
+
