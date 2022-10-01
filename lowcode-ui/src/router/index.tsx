@@ -8,8 +8,6 @@ import { getIsCanAccess } from '../utils/appTools'
 import { RoutesTypeNew } from '../types/routes'
 import { OnRouteBeforeType } from 'react-router-waiter'
 
-
-
 /**
  * @description: 全局路由配置
  * meta字段说明：↓↓↓
@@ -20,53 +18,55 @@ import { OnRouteBeforeType } from 'react-router-waiter'
  * @param {boolean} hideMenu // 是否在侧边栏中隐藏该路由菜单
  */
 const routes: RoutesTypeNew = [
-  {
-    path: '/',
-    redirect: '/index',
-  },
-  // {
-  //   path: '/',
-  //   element: <PageLayout />,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import(/* webpackChunkName: "index" */ '../views/index/index'),
-  //       meta: {
-  //         title: '首页',
-  //         accessId: '10000',
-  //       },
-  //     },
+	{
+		path: '/',
+		redirect: '/index',
+	},
+	// {
+	//   path: '/',
+	//   element: <PageLayout />,
+	//   children: [
+	//     {
+	//       path: 'index',
+	//       component: () => import(/* webpackChunkName: "index" */ '../views/index/index'),
+	//       meta: {
+	//         title: '首页',
+	//         accessId: '10000',
+	//       },
+	//     },
 
-  //   ]
-  // },
-  {
-    path: '/login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/login/index'),
-    meta: {
-      title: '登录',
-      noLogin: true,
-      hideMenu: true,
-    },
-  },
-  {
-    path: '/403',
-    component: () => import(/* webpackChunkName: "errorPage" */ '../views/errorPage/page403'),
-    meta: {
-      title: '403',
-      noLogin: true,
-      hideMenu: true,
-    },
-  },
-  {
-    path: '*',
-    component: () => import(/* webpackChunkName: "errorPage" */ '../views/errorPage/page404'),
-    meta: {
-      title: '404',
-      noLogin: true,
-      hideMenu: true,
-    },
-  },
-
+	//   ]
+	// },
+	{
+		path: '/login',
+		component: () =>
+			import(/* webpackChunkName: "login" */ '@/views/login/index'),
+		meta: {
+			title: '登录',
+			noLogin: true,
+			hideMenu: true,
+		},
+	},
+	{
+		path: '/403',
+		component: () =>
+			import(/* webpackChunkName: "errorPage" */ '@/views/errorPage/page403'),
+		meta: {
+			title: '403',
+			noLogin: true,
+			hideMenu: true,
+		},
+	},
+	{
+		path: '*',
+		component: () =>
+			import(/* webpackChunkName: "errorPage" */ '@/views/errorPage/page404'),
+		meta: {
+			title: '404',
+			noLogin: true,
+			hideMenu: true,
+		},
+	},
 ]
 
 /**
@@ -76,43 +76,43 @@ const routes: RoutesTypeNew = [
  * @return {string} 需要跳转到其他页时就return一个该页的path路径
  */
 const onRouteBefore: OnRouteBeforeType = ({ pathname, meta }) => {
-  const { userStore } = store
+	const { userStore } = store
 
-  // 动态修改页面title
-  if (meta.title !== undefined) {
-    document.title = meta.title
-  }
+	// 动态修改页面title
+	if (meta.title !== undefined) {
+		document.title = meta.title
+	}
 
-  // 登录及权限判断
-  if (!meta.noLogin) { // 路由是否需要登录
-    if (userStore.isLogin) { // 用户是否已登录
-      const { accessId } = meta
-      const message = `${pathname}，${meta.title || ''}`
-      const path403 = `/403?message=${encodeURIComponent(message)}`
+	// 登录及权限判断
+	if (!meta.noLogin) {
+		// 路由是否需要登录
+		if (userStore.isLogin) {
+			// 用户是否已登录
+			const { accessId } = meta
+			const message = `${pathname}，${meta.title || ''}`
+			const path403 = `/403?message=${encodeURIComponent(message)}`
 
-      if (!userStore.isGotUserInfo) { // 是否已获取到用户（权限）信息
-        return new Promise((resolve) => {
-          api.getUserInfo().then((res: any) => {
-            const data = res.data || {}
-            userStore.setUserInfo(data)
+			if (!userStore.isGotUserInfo) {
+				// 是否已获取到用户（权限）信息
+				return new Promise((resolve) => {
+					api.getUserInfo().then((res: any) => {
+						const data = res.data || {}
+						userStore.setUserInfo(data)
 
-            if (!getIsCanAccess(accessId)) {
-              resolve(path403)
-            }
-          })
-        })
-      } else {
-        if (!getIsCanAccess(accessId)) {
-          return path403
-        }
-      }
-    } else {
-      return `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
-    }
-  }
+						if (!getIsCanAccess(accessId)) {
+							resolve(path403)
+						}
+					})
+				})
+			} else {
+				if (!getIsCanAccess(accessId)) {
+					return path403
+				}
+			}
+		} else {
+			return `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
+		}
+	}
 }
 
-export {
-  routes,
-  onRouteBefore,
-}
+export { routes, onRouteBefore }
