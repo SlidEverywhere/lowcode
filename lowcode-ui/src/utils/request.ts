@@ -6,6 +6,14 @@ export class request {
     constructor (command :RequestConfig){
         this.config = {...config,...command}
     }
+    private loading :any;
+    public startLoading() {
+        // 加载中的弹框
+    this.loading = "加载中..."
+}
+public endLoading() {
+  this.loading.clear();
+}
     public createRequest(){
         const service =  axios.create({
             baseURL:`${this.config.http}://${this.config.host}:${this.config.port}/${this.config.path}/`,
@@ -15,6 +23,7 @@ export class request {
         // 请求拦截器
         service.interceptors.request.use(
             (config)=>{
+                this.startLoading()
                 // 通行
                 return config;
             },
@@ -23,7 +32,7 @@ export class request {
             });
         service.interceptors.response.use(
             response =>{
-
+                this.endLoading();
                 // 返回响应
                 return response;
             },
