@@ -17,33 +17,13 @@ import { OnRouteBeforeType } from 'react-router-waiter'
  * @param {boolean} noLogin // 路由页面是否需要登录访问
  * @param {boolean} hideMenu // 是否在侧边栏中隐藏该路由菜单
  */
-const routes: RoutesTypeNew = [
-	{
-		path: '/',
-		redirect: '/index',
-	},
-	// {
-	//   path: '/',
-	//   element: <PageLayout />,
-	//   children: [
-	//     {
-	//       path: 'index',
-	//       component: () => import(/* webpackChunkName: "index" */ '../views/index/index'),
-	//       meta: {
-	//         title: '首页',
-	//         accessId: '10000',
-	//       },
-	//     },
-
-	//   ]
-	// },
+const allowRoutes: RoutesTypeNew = [
 	{
 		path: '/login',
 		component: () =>
 			import(/* webpackChunkName: "login" */ '@/views/login/index'),
 		meta: {
 			title: '登录',
-			noLogin: true,
 			hideMenu: true,
 		},
 	},
@@ -53,7 +33,6 @@ const routes: RoutesTypeNew = [
 			import(/* webpackChunkName: "errorPage" */ '@/views/errorPage/page403'),
 		meta: {
 			title: '403',
-			noLogin: true,
 			hideMenu: true,
 		},
 	},
@@ -63,11 +42,40 @@ const routes: RoutesTypeNew = [
 			import(/* webpackChunkName: "errorPage" */ '@/views/errorPage/page404'),
 		meta: {
 			title: '404',
-			noLogin: true,
 			hideMenu: true,
 		},
 	},
+	{
+		path: '/',
+		redirect: '/index',
+	},
 ]
+const disableRoutes: RoutesTypeNew = [
+	{
+		path: '/test',
+		component: () => import(/* webpackChunkName: "errorPage" */ '@/views/test'),
+	},
+]
+// {
+//   path: '/',
+//   element: <PageLayout />,
+//   children: [
+//     {
+//       path: 'index',
+//       component: () => import(/* webpackChunkName: "index" */ '../views/index/index'),
+//       meta: {
+//         title: '首页',
+//         accessId: '10000',
+//       },
+//     },
+//   ]
+// },
+const routes: RoutesTypeNew = [...allowRoutes, ...disableRoutes]
+
+// 动态修改页面title
+function isAllowRoute(pathname: string): Boolean {
+	return !!allowRoutes.find((route) => route.path === pathname)
+}
 
 /**
  * @description: 全局路由拦截
@@ -75,17 +83,18 @@ const routes: RoutesTypeNew = [
  * @param {object} meta 当前路由自定义meta字段
  * @return {string} 需要跳转到其他页时就return一个该页的path路径
  */
+// 路由判断是否在白名单内
 const onRouteBefore: OnRouteBeforeType = ({ pathname, meta }) => {
 	const { userStore } = store
 
-	// 动态修改页面title
 	if (meta.title !== undefined) {
 		document.title = meta.title
 	}
 
 	// 登录及权限判断
-	if (!meta.noLogin) {
+	if (!isAllowRoute(pathname)) {
 		// 路由是否需要登录
+		// const isAllow =
 		if (userStore.isLogin) {
 			// 用户是否已登录
 			const { accessId } = meta
