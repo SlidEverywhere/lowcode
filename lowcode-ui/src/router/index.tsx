@@ -1,11 +1,11 @@
 // 路由统一配置
 
-import store from '../store'
-import api from '../api/index'
+import store from '@/store'
+import api from '@/api/index'
 // import PageLayout from '@/components/PageLayout'
 
-import { getIsCanAccess } from '../utils/appTools'
-import { RoutesTypeNew } from '../types/routes'
+import { getIsCanAccess } from '@/utils/appTools'
+import { RoutesTypeNew } from '@/types/routes'
 import { OnRouteBeforeType } from 'react-router-waiter'
 import PageLayout from '@/views/PageLayout'
 import pageRoutes from './routers/pageRoutes'
