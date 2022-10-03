@@ -6,6 +6,11 @@ import { Link } from 'react-router-dom'
 import { Dropdown, Menu, Avatar, Image, MenuProps } from 'antd'
 import Icon from '@ant-design/icons'
 import userAvatar from '@/assets/images/user/Avatar.svg'
+// import { useNavigate } from 'react-router-dom'
+// import {useStore} from '@/hooks/storeHook'
+
+// const {userStore} = useStore()
+// const navigate = useNavigate()
 
 // 点击头像内容事件
 const avatarClick: MenuProps['onClick'] = ({ key }) => {
@@ -22,20 +27,26 @@ const menu = (
 		onClick={avatarClick}
 		items={[
 			{
-				label: '111',
+				label: '183677_PO',
 				key: '1',
 			},
 			{
-				label: '2nd menu item',
+				label: '三行怎么展示？',
 				key: '2',
 			},
 			{
-				label: '3rd menu item',
+				label: '退出',
 				key: '3',
 			},
 		]}
 	/>
 )
+
+// 退出登录的逻辑
+// function onLogout () {
+// 	userStore.setTicket('')
+// 	navigate('/login')
+// }
 
 function PageLayout() {
 	return (
