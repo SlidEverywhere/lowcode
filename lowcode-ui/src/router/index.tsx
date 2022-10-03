@@ -7,6 +7,8 @@ import api from '../api/index'
 import { getIsCanAccess } from '../utils/appTools'
 import { RoutesTypeNew } from '../types/routes'
 import { OnRouteBeforeType } from 'react-router-waiter'
+import PageLayout from '@/views/PageLayout'
+import pageRoutes from './routers/pageRoutes'
 
 /**
  * @description: 全局路由配置
@@ -17,7 +19,10 @@ import { OnRouteBeforeType } from 'react-router-waiter'
  * @param {boolean} noLogin // 路由页面是否需要登录访问
  * @param {boolean} hideMenu // 是否在侧边栏中隐藏该路由菜单
  */
-const allowRoutes: RoutesTypeNew = [
+// 白名单路径名
+const allowRoutes: string[] = ['/login', '/403', '*', '/', '/index']
+
+const routes: RoutesTypeNew = [
 	{
 		path: '/login',
 		component: () =>
@@ -49,32 +54,24 @@ const allowRoutes: RoutesTypeNew = [
 		path: '/',
 		redirect: '/index',
 	},
-]
-const disableRoutes: RoutesTypeNew = [
+	{
+		path: '/',
+		element: <PageLayout />,
+		children: [...pageRoutes],
+	},
 	{
 		path: '/test',
 		component: () => import(/* webpackChunkName: "errorPage" */ '@/views/test'),
 	},
 ]
-// {
-//   path: '/',
-//   element: <PageLayout />,
-//   children: [
-//     {
-//       path: 'index',
-//       component: () => import(/* webpackChunkName: "index" */ '../views/index/index'),
-//       meta: {
-//         title: '首页',
-//         accessId: '10000',
-//       },
-//     },
-//   ]
-// },
-const routes: RoutesTypeNew = [...allowRoutes, ...disableRoutes]
 
 // 动态修改页面title
-function isAllowRoute(pathname: string): Boolean {
-	return !!allowRoutes.find((route) => route.path === pathname)
+function userAllowRoute(pathname: string): boolean {
+	console.log(
+		pathname,
+		allowRoutes.find((el) => pathname === el)
+	)
+	return !!allowRoutes.find((el) => pathname === el)
 }
 
 /**
@@ -92,7 +89,7 @@ const onRouteBefore: OnRouteBeforeType = ({ pathname, meta }) => {
 	}
 
 	// 登录及权限判断
-	if (!isAllowRoute(pathname)) {
+	if (!userAllowRoute(pathname)) {
 		// 路由是否需要登录
 		// const isAllow =
 		if (userStore.isLogin) {
