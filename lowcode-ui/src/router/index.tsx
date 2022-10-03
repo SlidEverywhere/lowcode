@@ -67,10 +67,11 @@ const routes: RoutesTypeNew = [
 
 // 动态修改页面title
 function userAllowRoute(pathname: string): boolean {
-	console.log(
-		pathname,
-		allowRoutes.find((el) => pathname === el)
-	)
+	// 打印title
+	// console.log(
+	// 	pathname,
+	// 	allowRoutes.find((el) => pathname === el)
+	// )
 	return !!allowRoutes.find((el) => pathname === el)
 }
 
@@ -116,6 +117,8 @@ const onRouteBefore: OnRouteBeforeType = ({ pathname, meta }) => {
 				}
 			}
 		} else {
+			// 未登录先弹窗，问一下要不要登录
+
 			return `/login?redirectUrl=${encodeURIComponent(window.location.href)}`
 		}
 	}

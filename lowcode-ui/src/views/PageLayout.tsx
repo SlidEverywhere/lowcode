@@ -1,9 +1,10 @@
-import { ReactNode } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 
 import { Outlet } from 'react-router-dom'
 import pageRoutes from '@/router/routers/pageRoutes'
 import { Link } from 'react-router-dom'
-import { Dropdown, Menu, Avatar, Image, MenuProps } from 'antd'
+import { Dropdown, Menu, Avatar, MenuProps, Image } from 'antd'
 import Icon from '@ant-design/icons'
 import userAvatar from '@/assets/images/user/Avatar.svg'
 // import { useNavigate } from 'react-router-dom'
@@ -14,33 +15,38 @@ import userAvatar from '@/assets/images/user/Avatar.svg'
 
 // 点击头像内容事件
 const avatarClick: MenuProps['onClick'] = ({ key }) => {
+	// 处理路由跳转，或其他操作
 	console.log(`Click on item ${key}`)
 }
-// const avatarLabel: ReactNode = (
-// 	<>
-// 		<Avatar src={userAvatar} />
-// 	</>
-// )
 
-const menu = (
-	<Menu
-		onClick={avatarClick}
-		items={[
-			{
-				label: '183677_PO',
-				key: '1',
-			},
-			{
-				label: '三行怎么展示？',
-				key: '2',
-			},
-			{
-				label: '退出',
-				key: '3',
-			},
-		]}
-	/>
-)
+const menu = () => {
+	// 获取用户信息
+	const [userName, setuserName] = useState('183677_OP')
+	return (
+		<Menu
+			onClick={avatarClick}
+			items={[
+				{
+					label: (
+						<>
+							<Avatar src={userAvatar} />
+							<span className='information'>{userName}</span>
+						</>
+					),
+					key: '1',
+				},
+				{
+					label: '我的文件',
+					key: '2',
+				},
+				{
+					label: '退出',
+					key: '3',
+				},
+			]}
+		/>
+	)
+}
 
 // 退出登录的逻辑
 // function onLogout () {
@@ -52,6 +58,8 @@ function PageLayout() {
 	return (
 		<div className='layout'>
 			<header className='headLayout'>
+				{/* 我们的图标 */}
+				<Image />
 				<nav>
 					<ul>
 						{pageRoutes.map((route) => (
@@ -62,7 +70,7 @@ function PageLayout() {
 					</ul>
 				</nav>
 				<span className='avatar'>
-					<Dropdown overlay={menu} trigger={['click']}>
+					<Dropdown overlay={menu()} trigger={['click']}>
 						<Avatar src={userAvatar} />
 					</Dropdown>
 				</span>
