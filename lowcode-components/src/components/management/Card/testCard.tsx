@@ -4,9 +4,11 @@ function TestCard() {
 	return (
 		<>
 			<Card
+				onClick={() => {
+					console.log(1)
+				}}
 				image={Image}
 				title='1231'
-				width={'20%'}
 				content='asdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 			/>
 		</>

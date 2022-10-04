@@ -15,15 +15,20 @@ function Card({
 	title,
 	content,
 	width,
+	onClick,
 }: {
 	Show?: JSX.Element
 	image: string
 	title: JSX.Element | string
 	content?: JSX.Element | string
 	width?: string | number
+	onClick?: Function
 }) {
 	return (
 		<div
+			onClick={() => {
+				onClick!()
+			}}
 			className={styles.Card}
 			style={{ width: typeof width! === 'number' ? width + 'px' : width }}>
 			<div>
@@ -31,6 +36,7 @@ function Card({
 					Show
 				) : (
 					<Image
+						preview={false}
 						width={'100%'}
 						height={200}
 						src={image}
