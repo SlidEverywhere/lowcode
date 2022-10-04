@@ -1,6 +1,28 @@
 .Card {
-background-color: #fff;
-min-width: 200px;
-// height: 200px;
-width: 20%;
+    background-color: #fff;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    // overflow: hidden;
+
+    h2 {
+        padding: 0 10px;
+        font-size: 25px;
+        font-weight: 600;
+
+    }
+
+    p {
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        font-size: 15px;
+        padding: 0 10px;
+        font-weight: 500;
+        color:#666;
+    }
+
 }
