@@ -1,3 +1,3 @@
-export * from './HelloWorld'
-export * from './Card/index'
+export {HelloWorld} from './HelloWorld'
+export {Card} from './Card/index'
 

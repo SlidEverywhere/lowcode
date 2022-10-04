@@ -1,4 +1,4 @@
-import styles from './Card.module.scss'
+import styles from './Card.module.less'
 // { width }: { width?: string }
 import { Image } from 'antd'
 /**
@@ -9,13 +9,14 @@ import { Image } from 'antd'
  * image 展示图片
  * title 标题 可以jsx
  */
-function Card({
+export function Card({
 	Show,
 	image,
 	title,
 	content,
 	width,
 	onClick,
+	bColor,
 }: {
 	Show?: JSX.Element
 	image: string
@@ -23,6 +24,7 @@ function Card({
 	content?: JSX.Element | string
 	width?: string | number
 	onClick?: Function
+	bColor?: string
 }) {
 	return (
 		<div
@@ -30,7 +32,10 @@ function Card({
 				onClick!()
 			}}
 			className={styles.Card}
-			style={{ width: typeof width! === 'number' ? width + 'px' : width }}>
+			style={{
+				width: typeof width! === 'number' ? width + 'px' : width,
+				backgroundColor: bColor,
+			}}>
 			<div>
 				{Show ? (
 					Show
@@ -49,5 +54,3 @@ function Card({
 		</div>
 	)
 }
-
-export default Card

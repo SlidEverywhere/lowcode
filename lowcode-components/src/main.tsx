@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import './Layout.scss'
+import './Layout.less'
 import 'antd/dist/antd.min.css'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { MyRouteType } from './types/router'

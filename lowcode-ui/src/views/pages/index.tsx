@@ -1,5 +1,6 @@
 import styles from './index.module.less'
-import { Divider } from 'antd'
+import { Card } from '@lowcode/components'
+import Image from '@/assets/images/Page/test.png'
 function Index() {
 	// 新建
 	// 最近打开
@@ -11,6 +12,16 @@ function Index() {
 					<p>专业强大的作图工具，可用于快捷搭建PPT,简历，和文章。</p>
 				</div>
 				<h3>新建项目</h3>
+				<div className='create-example'>
+					<Card
+						onClick={() => {
+							console.log(1)
+						}}
+						image={Image}
+						title='1231'
+						content='asdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+					/>
+				</div>
 			</main>
 		</div>
 	)

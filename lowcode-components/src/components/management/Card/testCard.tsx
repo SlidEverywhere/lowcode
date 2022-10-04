@@ -1,4 +1,4 @@
-import Card from './index'
+import { Card } from './index'
 import Image from '@/assets/1.jpg'
 function TestCard() {
 	return (
