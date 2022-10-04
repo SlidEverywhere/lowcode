@@ -48,6 +48,7 @@ ol {
 .layout .content {
   flex: 1;
   background-color: #eee;
+  display: flex;
 }
 .ant-dropdown {
   margin-top: 10px;

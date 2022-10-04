@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,5 +21,13 @@ export default defineConfig({
     // open: true, //在服务器启动时自动在浏览器中打开应用程序
     // 反向代理配置，注意rewrite写法
   },
+  css:{
+    preprocessorOptions:{
+      less:{
+        javascriptEnabled: true,
+          additionalData:  `@import "${path.resolve(__dirname, 'src/assets/css/global.less')}";`
+      }
+    }
+  }
   
 })

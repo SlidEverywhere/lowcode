@@ -2,9 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './Layout.scss'
+import 'antd/dist/antd.min.css'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { MyRouteType } from './types/router'
-const components = import.meta.glob('./components/**/*.tsx')
+const components = import.meta.glob('./components/**/test*.tsx')
 const componentsPromise = Object.keys(components)
 	.map((item) => components[item])
 	.map((f) => f())
