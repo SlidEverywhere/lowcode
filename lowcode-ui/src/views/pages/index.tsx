@@ -1,5 +1,6 @@
 import styles from './index.module.less'
-import { Card } from '@lowcode/components'
+// import { Card } from '@lowcode/components'
+import { Card } from 'antd'
 import Image from '@/assets/images/Page/test.png'
 const cardList = [
 	{
@@ -42,7 +43,7 @@ function Index() {
 					{cardList.map((item, index) => {
 						return (
 							<Card
-								clasName={styles.card}
+								className={styles.card}
 								key={index}
 								onClick={item.onclick}
 								image={item.image}

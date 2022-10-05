@@ -46,11 +46,14 @@ function Index() {
 				name='login'
 				form={form}
 				size='large'
-				initialValues={{ username: 'neo', password: '123456', remember: true }}>
+				initialValues={{  password: '123456', remember: true }}>
 				<Form.Item
 					name='username'
-					rules={[{ required: true, message: '必填' }]}>
-					<Input prefix={<UserOutlined />} placeholder='请输入用户名' />
+					rules={[{
+						pattern: new RegExp(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/, 'g'),
+						message: '请输入11位电话号'
+					}]}>
+					<Input prefix={<UserOutlined />} placeholder='请输入电话号' />
 				</Form.Item>
 
 				<Form.Item
