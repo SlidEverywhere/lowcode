@@ -40,7 +40,9 @@ const menu = () => {
 					key: '2',
 				},
 				{
-					label: '退出',
+					label: (
+							<p onClick="onLogout">退出</p>
+					),
 					key: '3',
 				},
 			]}
