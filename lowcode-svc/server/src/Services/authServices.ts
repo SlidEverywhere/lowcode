@@ -38,7 +38,7 @@ export default class AuthServices {
       password: encrypt(password),
       nickname: '新用户' + username,
       avatar:
-        'https://anti-cheat-book-api.xav1er.com/uploads/cfdab464be6099db23bcb4800.JPG'
+        'http://slideverywhere-api.xav1er.com/uploads/867dcacd1c968baed759d3e00.JPG'
     });
     // 保存到数据库
     const user = await userRepository.save(newUser);
