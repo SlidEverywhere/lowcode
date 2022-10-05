@@ -38,7 +38,7 @@ export default class AuthServices {
       password: encrypt(password),
       nickname: '新用户' + username,
       avatar:
-        'http://slideverywhere-api.xav1er.com/uploads/867dcacd1c968baed759d3e00.JPG'
+        'https://slideverywhere-api.xav1er.com/uploads/867dcacd1c968baed759d3e00.JPG'
     });
     // 保存到数据库
     const user = await userRepository.save(newUser);
