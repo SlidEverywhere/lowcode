@@ -1,6 +1,6 @@
 import styles from './index.module.less'
-// import { Card } from '@lowcode/components'
-import { Card } from 'antd'
+import { Card } from '@lowcode/components'
+// import { Card } from 'antd'
 import Image from '@/assets/images/Page/test.png'
 const cardList = [
 	{
@@ -18,7 +18,7 @@ const cardList = [
 	{
 		title: (
 			<>
-				<span className={styles.cardTitle}>敬请期待</span>
+				<span className={styles.cardTitle}>敬请期待。。。</span>
 			</>
 		),
 		content: '后期将组件开放新功能，作者正在努力加更中。。。',

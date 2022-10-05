@@ -7,16 +7,19 @@ import { Link } from 'react-router-dom'
 import { Dropdown, Menu, Avatar, MenuProps, Image } from 'antd'
 import Icon from '@ant-design/icons'
 import userAvatar from '@/assets/images/user/Avatar.svg'
-// import { useNavigate } from 'react-router-dom'
-// import {useStore} from '@/hooks/storeHook'
+import { useNavigate } from 'react-router-dom'
+import { useStore } from '@/hooks/storeHook'
 
-// const {userStore} = useStore()
-// const navigate = useNavigate()
+const { userStore } = useStore()
+const navigate = useNavigate()
 
 // 点击头像内容事件
 const avatarClick: MenuProps['onClick'] = ({ key }) => {
 	// 处理路由跳转，或其他操作
 	console.log(`Click on item ${key}`)
+	if (key === 'LoginOut') {
+		onLogout()
+	}
 }
 
 const menu = () => {
@@ -40,10 +43,8 @@ const menu = () => {
 					key: '2',
 				},
 				{
-					label: (
-							<p onClick="onLogout">退出</p>
-					),
-					key: '3',
+					label: '退出',
+					key: 'LoginOut',
 				},
 			]}
 		/>
@@ -51,10 +52,10 @@ const menu = () => {
 }
 
 // 退出登录的逻辑
-// function onLogout () {
-// 	userStore.setTicket('')
-// 	navigate('/login')
-// }
+function onLogout() {
+	userStore.setTicket('')
+	navigate('/login')
+}
 
 function PageLayout() {
 	return (

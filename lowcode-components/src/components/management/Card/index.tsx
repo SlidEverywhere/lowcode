@@ -17,7 +17,7 @@ export function Card({
 	width,
 	onClick,
 	bColor,
-	clasName,
+	className,
 }: {
 	Show?: JSX.Element
 	image: string
@@ -26,14 +26,14 @@ export function Card({
 	width?: string | number
 	onClick?: Function
 	bColor?: string
-	clasName?: string
+	className?: string
 }) {
 	return (
 		<div
 			onClick={() => {
 				onClick!()
 			}}
-			className={[styles.Card, clasName].join(' ')}
+			className={[styles.Card, className].join(' ')}
 			style={{
 				width: typeof width! === 'number' ? width + 'px' : width,
 				backgroundColor: bColor,
