@@ -3,6 +3,12 @@
   width: 250px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+}
+.Card:hover {
+  transition: all 0.2s;
+  box-shadow: 12px 25px 5px rgba(0, 0, 0, 0.1), -2px 20px 5px rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
 }
 .Card h2 {
   margin-top: 20px;

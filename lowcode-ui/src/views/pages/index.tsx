@@ -42,6 +42,7 @@ function Index() {
 					{cardList.map((item, index) => {
 						return (
 							<Card
+								clasName={styles.card}
 								key={index}
 								onClick={item.onclick}
 								image={item.image}
