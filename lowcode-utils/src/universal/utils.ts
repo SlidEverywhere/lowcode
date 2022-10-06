@@ -157,6 +157,10 @@ export const preview = () => {
   }, 200);
 };
 
+// 获取物料
+export const fetchSchema = async () => {
+  // return list
+};
 // 保存到云端
 export const saveOnline = () => {
   console.log('实现中');

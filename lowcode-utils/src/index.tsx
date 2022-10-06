@@ -5,6 +5,7 @@ import { Message } from '@alifd/next';
 
 import registerPlugins from './universal/plugin';
 import './universal/global.scss';
+import {fetchSchema} from 'src/universal/utils'
 
 export const C = createContext(null);
 
@@ -46,6 +47,12 @@ export const C = createContext(null);
           setHasPluginInited(true);
         })
         .catch((err) => console.error(err));
+        // fetchSchema()
+
+        // 模拟云端获取 schema
+        const listJSON = window.localStorage.getItem('projectSchemaList') as string
+        const list = JSON.parse(listJSON)
+        setList(list)
     }, []);
     
     return hasPluginInited ? (
