@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { PluginProps, ProjectSchema } from '@alilc/lowcode-types';
 import { project } from '@alilc/lowcode-engine';
 
-import { C } from 'src';
+import { C } from 'src/index';
 import './index.scss';
 
 const BaseComponent = {
@@ -156,6 +156,7 @@ const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
       },
     ]);
   }
+  
   return (
     <ul className="list-container" onClick={editPage}>
       {list.map(({ image }, index) => {

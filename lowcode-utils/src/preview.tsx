@@ -14,6 +14,7 @@ const SamplePreview = () => {
   const [data, setData] = useState({});
   const [index, setIndex] = useState(0);
   const list = JSON.parse(window.localStorage.getItem('projectSchemaList') as string);
+
   async function init() {
     const { packages } = list[index];
     const { componentsMap: componentsMapArray, componentsTree } = list[index].schema;
@@ -44,17 +45,20 @@ const SamplePreview = () => {
       components,
     });
   }
+
   useEffect(() => {
     setTimeout(() => {
       init();
     }, 200);
   }, [index]);
+
   const { schema, components } = data;
 
   if (!schema || !components) {
     init();
     return <Loading fullScreen />;
   }
+  
   return (
     <div className="lowcode-plugin-sample-preview">
       <ReactRenderer

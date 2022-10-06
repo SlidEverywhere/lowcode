@@ -47,6 +47,7 @@ export const C = createContext(null);
         })
         .catch((err) => console.error(err));
     }, []);
+    
     return hasPluginInited ? (
       <C.Provider value={{ index, setIndex, list, setList }}>
         <Workbench />

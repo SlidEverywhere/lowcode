@@ -16,7 +16,7 @@ import BehaviorSetter from '../setters/behavior-setter';
 import CustomSetter from '../setters/custom-setter';
 import Logo from '../plugins/logo';
 
-import { getPageSchema, saveSchema, preview } from './utils';
+import { getPageSchema, saveSchema, preview, saveOnline } from './utils';
 import assets from './assets.json';
 import PagePreview from 'src/plugins/page-preview';
 import { registerRefProp } from 'src/plugins/set-ref-prop';
@@ -72,7 +72,7 @@ export default async function registerPlugins() {
           name: 'logo',
           content: Logo,
           contentProps: {
-            href: 'http://www.baidu.com',
+            href: '/',
             title: 'SlidEverywhere',
           },
           props: {
@@ -171,6 +171,7 @@ export default async function registerPlugins() {
           props: {
             align: 'right',
           },
+          // TODO: saveOnline
           content: <Button onClick={() => saveOnline()}>保存到云端</Button>,
         });
       },
@@ -179,9 +180,7 @@ export default async function registerPlugins() {
   saveSample.pluginName = 'saveSample';
   await plugins.register(saveSample);
 
-  CodeEditor.pluginName = 'CodeEditor';
-  await plugins.register(CodeEditor);
-
+  // 预览按钮
   const previewSample = (ctx: ILowCodePluginContext) => {
     return {
       name: 'previewSample',
@@ -205,6 +204,9 @@ export default async function registerPlugins() {
   };
   previewSample.pluginName = 'previewSample';
   await plugins.register(previewSample);
+
+  CodeEditor.pluginName = 'CodeEditor';
+  await plugins.register(CodeEditor);
 
   const customSetter = (ctx: ILowCodePluginContext) => {
     return {

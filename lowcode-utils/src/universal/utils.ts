@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { material, project } from '@alilc/lowcode-engine';
-import { filterPackages } from '@alilc/lowcode-plugin-inject'
+import { filterPackages } from '@alilc/lowcode-plugin-inject';
 import { Message, Dialog } from '@alifd/next';
 import { ProjectSchema, TransformStage } from '@alilc/lowcode-types';
 
@@ -150,10 +150,16 @@ export const loadIncrementalAssets = () => {
   });
 };
 
+// 预览
 export const preview = () => {
   setTimeout(() => {
-    window.open("./preview.html");
+    window.open('./preview.html');
   }, 200);
+};
+
+// 保存到云端
+export const saveOnline = () => {
+  console.log('实现中');
 };
 
 export const saveSchema = async () => {
@@ -172,12 +178,12 @@ export const resetSchema = async (scenarioName: string = 'index') => {
           resolve();
         },
         onCancel: () => {
-          reject()
+          reject();
         },
-      })
-    })
+      });
+    });
   } catch (err) {
-    return
+    return;
   }
 
   // 除了「综合场景」，其他场景没有默认 schema.json，这里构造空页面
@@ -189,7 +195,7 @@ export const resetSchema = async (scenarioName: string = 'index') => {
         componentsMap: material.componentsMap,
         version: '1.0.0',
         i18n: {},
-      })
+      }),
     );
     project.getCurrentDocument()?.importSchema({ componentName: 'Page', fileName: 'sample' });
     project.simulatorHost?.rerender();
@@ -199,12 +205,12 @@ export const resetSchema = async (scenarioName: string = 'index') => {
 
   let schema;
   try {
-    schema = await request('./schema.json')
+    schema = await request('./schema.json');
   } catch (err) {
     schema = {
       componentName: 'Page',
       fileName: 'sample',
-    }
+    };
   }
 
   window.localStorage.setItem(
@@ -214,13 +220,13 @@ export const resetSchema = async (scenarioName: string = 'index') => {
       componentsMap: material.componentsMap,
       version: '1.0.0',
       i18n: {},
-    })
+    }),
   );
 
   project.getCurrentDocument()?.importSchema(schema);
   project.simulatorHost?.rerender();
   Message.success('成功重置页面');
-}
+};
 
 const getLSName = (scenarioName: string, ns: string = 'projectSchema') => `${scenarioName}:${ns}`;
 
@@ -230,7 +236,7 @@ export const getProjectSchemaFromLocalStorage = (scenarioName: string) => {
     return;
   }
   return JSON.parse(window.localStorage.getItem(getLSName(scenarioName)) || '{}');
-}
+};
 
 const setProjectSchemaToLocalStorage = (scenarioName: string) => {
   if (!scenarioName) {
@@ -239,9 +245,9 @@ const setProjectSchemaToLocalStorage = (scenarioName: string) => {
   }
   window.localStorage.setItem(
     getLSName(scenarioName),
-    JSON.stringify(project.exportSchema(TransformStage.Save))
+    JSON.stringify(project.exportSchema(TransformStage.Save)),
   );
-}
+};
 
 const setPackgesToLocalStorage = async (scenarioName: string) => {
   if (!scenarioName) {
@@ -249,18 +255,15 @@ const setPackgesToLocalStorage = async (scenarioName: string) => {
     return;
   }
   const packages = await filterPackages(material.getAssets().packages);
-  window.localStorage.setItem(
-    getLSName(scenarioName, 'packages'),
-    JSON.stringify(packages),
-  );
-}
+  window.localStorage.setItem(getLSName(scenarioName, 'packages'), JSON.stringify(packages));
+};
 
 export const getPackagesFromLocalStorage = (scenarioName: string) => {
   return JSON.parse(window.localStorage.getItem(getLSName(scenarioName, 'packages')) || '{}');
-}
+};
 
 export const getPageSchema = async (scenarioName: string = 'index') => {
-  const pageSchema = getProjectSchemaFromLocalStorage(scenarioName).componentsTree?.[0]
+  const pageSchema = getProjectSchemaFromLocalStorage(scenarioName).componentsTree?.[0];
 
   if (pageSchema) {
     return pageSchema;
