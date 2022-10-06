@@ -1,10 +1,11 @@
 import { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { common, plugins, config, project } from '@alilc/lowcode-engine';
+import { common, plugins, config, project, material } from '@alilc/lowcode-engine';
 import { Message, Dialog } from '@alifd/next';
 
 import registerPlugins from './universal/plugin';
 import './universal/global.scss';
+import { filterPackages } from '@alilc/lowcode-plugin-inject';
 
 export const C = createContext(null);
 
@@ -18,8 +19,9 @@ export const C = createContext(null);
     const [index, setIndex] = useState(0);
     const [list, setList] = useState([
       {
-        image: 'https://pic.pptstore.net/pptpic/83/21/3d1edbb85684d809_middle.png',
+        image: '',
         schema: project.exportSchema(),
+        packages: '',
       },
     ]);
     const keyDown = (e) => {

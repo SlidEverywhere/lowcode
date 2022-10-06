@@ -8,20 +8,12 @@ import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler';
 
 import { getProjectSchemaFromLocalStorage, getPackagesFromLocalStorage } from './universal/utils';
 
-const getScenarioName = function () {
-  if (location.search) {
-    return new URLSearchParams(location.search.slice(1)).get('scenarioName') || 'index';
-  }
-  return 'index';
-};
-
 const SamplePreview = () => {
   const [data, setData] = useState({});
 
   async function init() {
-    const scenarioName = getScenarioName();
-    const packages = getPackagesFromLocalStorage(scenarioName);
-    const projectSchema = getProjectSchemaFromLocalStorage(scenarioName);
+    const packages = getPackagesFromLocalStorage('index');
+    const projectSchema = getProjectSchemaFromLocalStorage('index');
     const { componentsMap: componentsMapArray, componentsTree } = projectSchema;
     const componentsMap: any = {};
     componentsMapArray.forEach((component: any) => {

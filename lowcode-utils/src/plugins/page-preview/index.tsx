@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { PluginProps, ProjectSchema } from '@alilc/lowcode-types';
 import { project } from '@alilc/lowcode-engine';
 
@@ -120,10 +120,11 @@ const BaseComponent = {
 export interface Page {
   image: string;
   schema: any;
+  packages: any;
 }
 
 const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
-  const { list, setList, index, setIndex } = useContext(C) as unknown as {
+  const { list, setList, setIndex } = useContext(C) as unknown as {
     list: Page[];
     setList: React.Dispatch<
       React.SetStateAction<
@@ -146,12 +147,23 @@ const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
   }
   function add(event: Event) {
     event.stopPropagation();
-    setList([...list, { image: '', schema: BaseComponent }]);
+    setList([
+      ...list,
+      {
+        image: '',
+        schema: BaseComponent,
+        packages: '',
+      },
+    ]);
   }
   return (
     <ul className="list-container" onClick={editPage}>
       {list.map(({ image }, index) => {
-        return <li data-index={index}>{image && <img src={image} data-index={index} />}</li>;
+        return (
+          <li data-index={index} className="add">
+            {image ? <img src={image} data-index={index} /> : index + 1}
+          </li>
+        );
       })}
       <li className="add" onClick={add}>
         新建幻灯片

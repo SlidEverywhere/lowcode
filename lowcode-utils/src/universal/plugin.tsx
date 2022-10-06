@@ -162,17 +162,8 @@ export default async function registerPlugins() {
     return {
       name: 'saveSample',
       async init() {
-        const { skeleton, hotkey } = ctx;
+        const { skeleton } = ctx;
 
-        // skeleton.add({
-        //   name: 'saveSample',
-        //   area: 'topArea',
-        //   type: 'Widget',
-        //   props: {
-        //     align: 'right',
-        //   },
-        //   content: <Button onClick={() => saveSchema()}>导出到本地</Button>,
-        // });
         skeleton.add({
           name: 'saveOnline',
           area: 'topArea',
@@ -181,10 +172,6 @@ export default async function registerPlugins() {
             align: 'right',
           },
           content: <Button onClick={() => saveOnline()}>保存到云端</Button>,
-        });
-        hotkey.bind('command+s', (e) => {
-          e.preventDefault();
-          saveSchema();
         });
       },
     };
