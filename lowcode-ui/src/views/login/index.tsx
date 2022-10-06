@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { getRoutePath } from '@/utils/appTools'
 import { useStore } from '@/hooks/storeHook'
 import tools from '@/utils/tools'
+import api from '@/api/index'
 
 function Index() {
 	const navigate = useNavigate()
@@ -24,9 +25,20 @@ function Index() {
 		form.validateFields().then((values: any) => {
 			console.log(values)
 			setTimeout(() => {
-				const ticket = 'token123'
-				userStore.setTicket(ticket)
+				// const ticket = 'token123'
+				// 请求登录接口
+				// 我不知道该怎么获取输入的username和password，我知道得传参
+				api.login({username, password}).then(res: any) => {
+					if(res.code === 2000) {
+						const data = res.data || {}
+					  userStore.setTicket(data.token)
+					}.catch(err) {
+						console.log(err);
+					}
 
+				}
+
+				// userStore.setTicket(ticket)
 				if (redirectUrl) {
 					const path = getRoutePath(redirectUrl, true)
 					navigate(path)

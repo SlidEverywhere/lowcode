@@ -25,7 +25,7 @@ function App () {
       if (!userStore.isGotUserInfo) {
         api.getUserInfo().then((res: any) => {
           const data = res.data || {}
-          userStore.setUserInfo(data)
+          userStore.setUserInfo(data.user)
           setIsRender(true)
         })
       }

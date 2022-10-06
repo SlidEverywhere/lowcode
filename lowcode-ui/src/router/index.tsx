@@ -56,7 +56,7 @@ const routes: RoutesTypeNew = [
 	},
 	{
 		path: '/',
-		element: <PageLayout />,
+		// element: <PageLayout />,
 		children: [...pageRoutes],
 	},
 	{

@@ -2,7 +2,9 @@ import http from './request/http'
 
 const api = {
   // 获取用户信息
-  getUserInfo: (data) => http('get', '', '/auth/login', data)
+  // register: () => http('post', '', '/auth/register', data)
+  login: ({username: string, password: string}) => http('post', '', '/auth/login', {username, password})
+  getUserInfo: (token:string) => http('post', '', '/auth/validate', token)
 
 
   // 模拟从接口获取用户信息
