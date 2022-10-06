@@ -1,20 +1,22 @@
 import ReactDOM from 'react-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loading } from '@alifd/next';
 import { buildComponents, assetBundle, AssetLevel, AssetLoader } from '@alilc/lowcode-utils';
 import ReactRenderer from '@alilc/lowcode-react-renderer';
 import { injectComponents } from '@alilc/lowcode-plugin-inject';
 import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler';
 
-import { getProjectSchemaFromLocalStorage, getPackagesFromLocalStorage } from './universal/utils';
+import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
+
+import './preview.scss';
 
 const SamplePreview = () => {
   const [data, setData] = useState({});
-
+  const [index, setIndex] = useState(0);
   async function init() {
-    const packages = getPackagesFromLocalStorage('index');
-    const projectSchema = getProjectSchemaFromLocalStorage('index');
-    const { componentsMap: componentsMapArray, componentsTree } = projectSchema;
+    const list = JSON.parse(window.localStorage.getItem('projectSchemaList') as string);
+    const { packages } = list[index];
+    const { componentsMap: componentsMapArray, componentsTree } = list[index].schema;
     const componentsMap: any = {};
     componentsMapArray.forEach((component: any) => {
       componentsMap[component.componentName] = component;
@@ -33,8 +35,6 @@ const SamplePreview = () => {
     });
 
     const vendors = [assetBundle(libraryAsset, AssetLevel.Library)];
-
-    // TODO asset may cause pollution
     const assetLoader = new AssetLoader();
     await assetLoader.load(libraryAsset);
     const components = await injectComponents(buildComponents(libraryMap, componentsMap));
@@ -44,14 +44,15 @@ const SamplePreview = () => {
       components,
     });
   }
-
+  useEffect(() => {
+    init();
+  }, [index]);
   const { schema, components } = data;
 
   if (!schema || !components) {
     init();
     return <Loading fullScreen />;
   }
-
   return (
     <div className="lowcode-plugin-sample-preview">
       <ReactRenderer
@@ -64,6 +65,20 @@ const SamplePreview = () => {
           },
         }}
       />
+      <div className="menu">
+        <LeftCircleOutlined
+          style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
+          onClick={() => {
+            setIndex(index - 1);
+          }}
+        />
+        <RightCircleOutlined
+          style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
+          onClick={() => {
+            setIndex(index + 1);
+          }}
+        />
+      </div>
     </div>
   );
 };

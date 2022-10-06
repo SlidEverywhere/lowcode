@@ -150,10 +150,9 @@ export const loadIncrementalAssets = () => {
   });
 };
 
-export const preview = (scenarioName: string = 'index') => {
+export const preview = () => {
   setTimeout(() => {
-    const search = location.search ? `${location.search}&scenarioName=${scenarioName}` : `?scenarioName=${scenarioName}`;
-    window.open(`./preview.html${search}`);
+    window.open("./ preview.html");
   }, 200);
 };
 
@@ -257,10 +256,6 @@ const setPackgesToLocalStorage = async (scenarioName: string) => {
 }
 
 export const getPackagesFromLocalStorage = (scenarioName: string) => {
-  if (!scenarioName) {
-    console.error('scenarioName is required!');
-    return;
-  }
   return JSON.parse(window.localStorage.getItem(getLSName(scenarioName, 'packages')) || '{}');
 }
 

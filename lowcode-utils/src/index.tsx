@@ -1,11 +1,10 @@
 import { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { common, plugins, config, project, material } from '@alilc/lowcode-engine';
-import { Message, Dialog } from '@alifd/next';
+import { Message } from '@alifd/next';
 
 import registerPlugins from './universal/plugin';
 import './universal/global.scss';
-import { filterPackages } from '@alilc/lowcode-plugin-inject';
 
 export const C = createContext(null);
 
@@ -32,7 +31,9 @@ export const C = createContext(null);
       if (currKey == 83 && (e.ctrlKey || e.metaKey)) {
         let meta = list;
         meta[index].schema = project.exportSchema();
+        meta[index].packages = material.getAssets().packages;
         setList([...meta]);
+        window.localStorage.setItem('projectSchemaList', JSON.stringify(list));
         Message.success('成功保存到本地');
         return false;
       }
