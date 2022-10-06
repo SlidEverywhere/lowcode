@@ -152,7 +152,7 @@ export const loadIncrementalAssets = () => {
 
 export const preview = () => {
   setTimeout(() => {
-    window.open("./ preview.html");
+    window.open("./preview.html");
   }, 200);
 };
 

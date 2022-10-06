@@ -13,8 +13,8 @@ import './preview.scss';
 const SamplePreview = () => {
   const [data, setData] = useState({});
   const [index, setIndex] = useState(0);
+  const list = JSON.parse(window.localStorage.getItem('projectSchemaList') as string);
   async function init() {
-    const list = JSON.parse(window.localStorage.getItem('projectSchemaList') as string);
     const { packages } = list[index];
     const { componentsMap: componentsMapArray, componentsTree } = list[index].schema;
     const componentsMap: any = {};
@@ -45,7 +45,9 @@ const SamplePreview = () => {
     });
   }
   useEffect(() => {
-    init();
+    setTimeout(() => {
+      init();
+    }, 200);
   }, [index]);
   const { schema, components } = data;
 
@@ -69,13 +71,17 @@ const SamplePreview = () => {
         <LeftCircleOutlined
           style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
           onClick={() => {
-            setIndex(index - 1);
+            if (index > 0) {
+              setIndex(index - 1);
+            }
           }}
         />
         <RightCircleOutlined
           style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
           onClick={() => {
-            setIndex(index + 1);
+            if (index < list.length - 1) {
+              setIndex(index + 1);
+            }
           }}
         />
       </div>
