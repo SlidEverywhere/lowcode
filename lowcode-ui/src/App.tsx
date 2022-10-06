@@ -35,7 +35,7 @@ function App() {
 
 	return (
 		<HashRouter>
-			{!isRender ? (
+			{isRender ? (
 				<RouterWaiter routes={routes} onRouteBefore={onRouteBefore} />
 			) : null}
 		</HashRouter>
