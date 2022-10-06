@@ -5,7 +5,7 @@ import {
 	useMatch,
 	useResolvedPath,
 } from 'react-router-dom'
-import { MyRouteType } from './types/router'
+import { MyRouteType } from '@/types/router'
 interface props {
 	router: MyRouteType[]
 }

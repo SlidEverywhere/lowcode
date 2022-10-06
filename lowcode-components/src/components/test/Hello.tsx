@@ -3,6 +3,7 @@ export function Hello() {
 	return (
 		<>
 			<Button>hello</Button>
+			hello
 		</>
 	)
 }

@@ -1,0 +1,35 @@
+.Card {
+    background-color: #fff;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    // overflow: hidden;
+&:hover{
+    transition: all 0.2s; // 表示进入 hover 状态时，0.2s 内完成变换
+		box-shadow: 12px 25px 5px rgb(0 0 0 / 10%), -2px 20px 5px rgb(0 0 0 / 10%);
+    transform: scale(1.1);
+}
+    h2 {
+        margin-top: 20px;
+        padding: 0 10px;
+        font-size: 25px;
+        font-weight: 600;
+
+    }
+
+    p {
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        font-size: 15px;
+        padding: 0 10px;
+        font-weight: 500;
+        color:#666;
+        line-height: 1.5;
+    }
+
+}
