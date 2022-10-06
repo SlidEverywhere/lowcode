@@ -2,10 +2,11 @@ import { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { common, plugins, config, project, material } from '@alilc/lowcode-engine';
 import { Message } from '@alifd/next';
+import { project } from '@alilc/lowcode-engine';
 
 import registerPlugins from './universal/plugin';
 import './universal/global.scss';
-import {fetchSchema} from 'src/universal/utils'
+import { fetchSchema } from 'src/universal/utils'
 
 export const C = createContext(null);
 
@@ -53,6 +54,7 @@ export const C = createContext(null);
         const listJSON = window.localStorage.getItem('projectSchemaList') as string
         const list = JSON.parse(listJSON)
         setList(list)
+        project.importSchema(list[index].schema);
     }, []);
     
     return hasPluginInited ? (
