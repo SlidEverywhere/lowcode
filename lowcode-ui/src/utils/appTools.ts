@@ -81,6 +81,7 @@ function getRoutePath (url = '', isIncludeParams = false) {
   const reg = new RegExp(`//[\\w-\\.:]+${divideStr}(.*)*`)
   const match = url.match(reg) || []
   const pathWithParams = '/' + (match[1] || '')
+  
   if (!isIncludeParams) {
     return pathWithParams
   } else {
