@@ -15,7 +15,7 @@
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.1",
+    "react-router-dom": "6",
     "react-router-waiter": "^1.1.7",
     "ut-utils": "^0.0.4"
   },
