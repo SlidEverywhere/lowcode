@@ -24,19 +24,22 @@ function Index() {
 	function onSubmit() {
 		form.validateFields().then((values: any) => {
 			console.log(values)
+			const { username, password } = values
 			setTimeout(() => {
 				// const ticket = 'token123'
 				// 请求登录接口
 				// 我不知道该怎么获取输入的username和password，我知道得传参
-				api.login({username, password}).then(res: any) => {
-					if(res.code === 2000) {
-						const data = res.data || {}
-					  userStore.setTicket(data.token)
-					}.catch(err) {
-						console.log(err);
-					}
-
-				}
+				api
+					.login({ username, password })
+					.then((res: any) => {
+						if (res.code === 2000) {
+							const data = res.data || {}
+							userStore.setTicket(data.token)
+						}
+					})
+					.catch((err) => {
+						console.log(err)
+					})
 
 				// userStore.setTicket(ticket)
 				if (redirectUrl) {
@@ -58,13 +61,18 @@ function Index() {
 				name='login'
 				form={form}
 				size='large'
-				initialValues={{  password: '123456', remember: true }}>
+				initialValues={{ password: '123456', remember: true }}>
 				<Form.Item
 					name='username'
-					rules={[{
-						pattern: new RegExp(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/, 'g'),
-						message: '请输入11位电话号'
-					}]}>
+					rules={[
+						{
+							pattern: new RegExp(
+								/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+								'g'
+							),
+							message: '请输入11位电话号',
+						},
+					]}>
 					<Input prefix={<UserOutlined />} placeholder='请输入电话号' />
 				</Form.Item>
 

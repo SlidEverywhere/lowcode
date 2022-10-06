@@ -3,7 +3,7 @@ import http from './request/http'
 const api = {
   // 获取用户信息
   // register: () => http('post', '', '/auth/register', data)
-  login: ({username: string, password: string}) => http('post', '', '/auth/login', {username, password})
+  login: ({username, password}:{username:string,password:string}) => http('post', '', '/auth/login', {username, password}),
   getUserInfo: (token:string) => http('post', '', '/auth/validate', token)
 
 

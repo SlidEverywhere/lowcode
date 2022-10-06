@@ -10,54 +10,53 @@ import userAvatar from '@/assets/images/user/Avatar.svg'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/hooks/storeHook'
 
-const { userStore } = useStore()
-const navigate = useNavigate()
-
-// 点击头像内容事件
-const avatarClick: MenuProps['onClick'] = ({ key }) => {
-	// 处理路由跳转，或其他操作
-	console.log(`Click on item ${key}`)
-	if (key === 'LoginOut') {
-		onLogout()
-	}
-}
-
-const menu = () => {
-	// 获取用户信息
-	const [userName, setuserName] = useState('183677_OP')
-	return (
-		<Menu
-			onClick={avatarClick}
-			items={[
-				{
-					label: (
-						<>
-							<Avatar src={userAvatar} />
-							<span className='information'>{userName}</span>
-						</>
-					),
-					key: '1',
-				},
-				{
-					label: '我的文件',
-					key: '2',
-				},
-				{
-					label: '退出',
-					key: 'LoginOut',
-				},
-			]}
-		/>
-	)
-}
-
-// 退出登录的逻辑
-function onLogout() {
-	userStore.setTicket('')
-	navigate('/login')
-}
-
 function PageLayout() {
+	const { userStore } = useStore()
+	const navigate = useNavigate()
+
+	// 点击头像内容事件
+	const avatarClick: MenuProps['onClick'] = ({ key }) => {
+		// 处理路由跳转，或其他操作
+		console.log(`Click on item ${key}`)
+		if (key === 'LoginOut') {
+			onLogout()
+		}
+	}
+
+	const menu = () => {
+		// 获取用户信息
+		const [userName, setuserName] = useState('183677_OP')
+		return (
+			<Menu
+				onClick={avatarClick}
+				items={[
+					{
+						label: (
+							<>
+								<Avatar src={userAvatar} />
+								<span className='information'>{userName}</span>
+							</>
+						),
+						key: '1',
+					},
+					{
+						label: '我的文件',
+						key: '2',
+					},
+					{
+						label: '退出',
+						key: 'LoginOut',
+					},
+				]}
+			/>
+		)
+	}
+
+	// 退出登录的逻辑
+	function onLogout() {
+		userStore.setTicket('')
+		navigate('/login')
+	}
 	return (
 		<div className='layout'>
 			<header className='headLayout'>

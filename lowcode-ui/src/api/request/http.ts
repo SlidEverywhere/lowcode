@@ -48,7 +48,7 @@
    }
  
    // 返回promise
-   return new Promise((resolve, reject) => {
+   return new Promise<any>((resolve, reject) => {
      request({
        url,
        data,
@@ -61,8 +61,8 @@
        .then(res => {
          resolve(res)
        })
-       .catch(error => {
-         reject(error)
+       .catch(err => {
+         reject(err)
        })
    })
  }

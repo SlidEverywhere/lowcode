@@ -56,7 +56,8 @@ const routes: RoutesTypeNew = [
 	},
 	{
 		path: '/',
-		// element: <PageLayout />,
+		component: () =>
+			import(/* webpackChunkName: "errorPage" */ '@/views/PageLayout'),
 		children: [...pageRoutes],
 	},
 	{
@@ -102,6 +103,7 @@ const onRouteBefore: OnRouteBeforeType = ({ pathname, meta }) => {
 			if (!userStore.isGotUserInfo) {
 				// 是否已获取到用户（权限）信息
 				return new Promise((resolve) => {
+					// token 放进去
 					api.getUserInfo().then((res: any) => {
 						const data = res.data || {}
 						userStore.setUserInfo(data)
