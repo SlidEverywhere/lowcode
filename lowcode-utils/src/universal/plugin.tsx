@@ -15,10 +15,10 @@ import TitleSetter from '@alilc/lowcode-setter-title';
 import BehaviorSetter from '../setters/behavior-setter';
 import CustomSetter from '../setters/custom-setter';
 import Logo from '../plugins/logo';
-import { deleteHiddenTransducer } from '../plugins/delete-hidden-transducer';
 
-import { loadIncrementalAssets, getPageSchema, saveSchema, resetSchema, preview } from './utils';
+import { getPageSchema, saveSchema, preview } from './utils';
 import assets from './assets.json';
+import PagePreview from 'src/plugins/page-preview';
 import { registerRefProp } from 'src/plugins/set-ref-prop';
 
 export default async function registerPlugins() {
@@ -27,8 +27,6 @@ export default async function registerPlugins() {
   await plugins.register(Inject);
 
   await plugins.register(registerRefProp);
-
-  await plugins.register(deleteHiddenTransducer);
 
   // plugin API 见 https://lowcode-engine.cn/docV2/ibh9fh
   SchemaPlugin.pluginName = 'SchemaPlugin';
@@ -74,7 +72,6 @@ export default async function registerPlugins() {
           name: 'logo',
           content: Logo,
           contentProps: {
-            logo: '',
             href: 'http://www.baidu.com',
             title: 'SlidEverywhere',
           },
@@ -99,6 +96,24 @@ export default async function registerPlugins() {
         componentsPane?.disable?.();
         project.onSimulatorRendererReady(() => {
           componentsPane?.enable?.();
+        });
+
+        // 注册页面管理面板
+        const pagePreview = skeleton.add({
+          area: 'leftArea',
+          type: 'PanelDock',
+          name: 'pagePreview',
+          content: PagePreview,
+          contentProps: {},
+          props: {
+            align: 'top',
+            icon: 'kaiwenjianjia',
+            description: '页面管理',
+          },
+        });
+        pagePreview?.disable?.();
+        project.onSimulatorRendererReady(() => {
+          pagePreview?.enable?.();
         });
       },
     };
@@ -149,15 +164,15 @@ export default async function registerPlugins() {
       async init() {
         const { skeleton, hotkey } = ctx;
 
-        skeleton.add({
-          name: 'saveSample',
-          area: 'topArea',
-          type: 'Widget',
-          props: {
-            align: 'right',
-          },
-          content: <Button onClick={() => saveSchema()}>保存到本地</Button>,
-        });
+        // skeleton.add({
+        //   name: 'saveSample',
+        //   area: 'topArea',
+        //   type: 'Widget',
+        //   props: {
+        //     align: 'right',
+        //   },
+        //   content: <Button onClick={() => saveSchema()}>导出到本地</Button>,
+        // });
         skeleton.add({
           name: 'saveOnline',
           area: 'topArea',

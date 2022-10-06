@@ -1,7 +1,12 @@
+import { useContext } from 'react';
+
 import { material, project } from '@alilc/lowcode-engine';
 import { filterPackages } from '@alilc/lowcode-plugin-inject'
 import { Message, Dialog } from '@alifd/next';
-import { TransformStage } from '@alilc/lowcode-types';
+import { ProjectSchema, TransformStage } from '@alilc/lowcode-types';
+
+import { C } from 'src';
+import { Page } from 'src/plugins/page-preview';
 
 export const loadIncrementalAssets = () => {
   material?.onChangeAssets(() => {
@@ -153,19 +158,10 @@ export const preview = (scenarioName: string = 'index') => {
   }, 500);
 };
 
-export const saveSchema = async (scenarioName: string = 'index') => {
-  setProjectSchemaToLocalStorage(scenarioName);
+export const saveSchema = async () => {
+  // setProjectSchemaToLocalStorage(scenarioName);
 
-  await setPackgesToLocalStorage(scenarioName);
-  // window.localStorage.setItem(
-  //   'projectSchema',
-  //   JSON.stringify(project.exportSchema(TransformStage.Save))
-  // );
-  // const packages = await filterPackages(material.getAssets().packages);
-  // window.localStorage.setItem(
-  //   'packages',
-  //   JSON.stringify(packages)
-  // );
+  // await setPackgesToLocalStorage(scenarioName);
   Message.success('成功保存到本地');
 };
 
@@ -182,7 +178,7 @@ export const resetSchema = async (scenarioName: string = 'index') => {
         },
       })
     })
-  } catch(err) {
+  } catch (err) {
     return
   }
 
@@ -206,7 +202,7 @@ export const resetSchema = async (scenarioName: string = 'index') => {
   let schema;
   try {
     schema = await request('./schema.json')
-  } catch(err) {
+  } catch (err) {
     schema = {
       componentName: 'Page',
       fileName: 'sample',
