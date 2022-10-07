@@ -27,25 +27,25 @@
  
    // url
    let url = ''
-   if (process.env.NODE_ENV === 'development') {
-     // 本地开发
-     url = apiUrl
-   } else {
+  //  if (process.env.NODE_ENV === 'development') {
+  //    // 本地开发
+  //    url = apiUrl
+  //  } else {
      // 生产服务器
-     let origin = ''
-     if (host.match(/^http/)) {
-       origin = host
-     } else {
-       if (host.match(/^\/\//)) {
-         host = host.slice(2)
-       }
-       origin = `${window.location.protocol}//${host}`
-     }
-     if (apiUrl.match(/\/proxy\//)) {
-       apiUrl = ''
-     }
+     let origin = 'https://slideverywhere-api.xav1er.com'
+    //  if (host.match(/^http/)) {
+    //    origin = host
+    //  } else {
+    //    if (host.match(/^\/\//)) {
+    //      host = host.slice(2)
+    //    }
+    //    origin = `${window.location.protocol}//${host}`
+    //  }
+    //  if (apiUrl.match(/\/proxy\//)) {
+    //    apiUrl = ''
+    //  }
      url = origin + apiUrl
-   }
+  //  }
  
    // 返回promise
    return new Promise<any>((resolve, reject) => {
