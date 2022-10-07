@@ -2,6 +2,8 @@
 import Router from '@koa/router';
 import { login, register, tokenValidate } from './auth';
 import { fileRoutes } from './file';
+import { playRoutes } from './play';
+import { slideRoutes } from './slide';
 import { userRoutes } from './user';
 
 // 不受保护的路由
@@ -13,6 +15,8 @@ const unprotectedRouter = new Router()
 const protectedRouter = new Router()
   .use('/auth', tokenValidate.routes(), tokenValidate.allowedMethods())
   .use('/file', fileRoutes.routes(), fileRoutes.allowedMethods())
-  .use('/user', userRoutes.routes(), userRoutes.allowedMethods());
+  .use('/user', userRoutes.routes(), userRoutes.allowedMethods())
+  .use('/play', playRoutes.routes(), playRoutes.allowedMethods())
+  .use('/slide', slideRoutes.routes(), slideRoutes.allowedMethods());
 
 export { protectedRouter, unprotectedRouter };
