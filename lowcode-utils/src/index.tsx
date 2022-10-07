@@ -25,7 +25,7 @@ export const C = createContext(null);
         packages: '',
       },
     ]);
-    const keyDown = (e) => {
+    const keyDown = (e: KeyboardEvent) => {
       e.preventDefault();
       var currKey = 0,
         e = e || event || window.event;
@@ -58,6 +58,7 @@ export const C = createContext(null);
     }, []);
     
     return hasPluginInited ? (
+      // @ts-ignore
       <C.Provider value={{ index, setIndex, list, setList }}>
         <Workbench />
       </C.Provider>

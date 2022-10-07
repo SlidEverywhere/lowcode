@@ -6,14 +6,11 @@ import ReactRenderer from '@alilc/lowcode-react-renderer';
 import { injectComponents } from '@alilc/lowcode-plugin-inject';
 import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler';
 
-import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
 import { message } from 'antd'
 import 'antd/dist/antd.css';
 
-import './preview.scss';
-
 const SamplePreview = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<any>({});
   const [index, setIndex] = useState(0);
   const list = JSON.parse(window.localStorage.getItem('projectSchemaList') as string);
 
@@ -27,8 +24,10 @@ const SamplePreview = () => {
     const schema = componentsTree[0];
 
     const libraryMap = {};
-    const libraryAsset = [];
+    const libraryAsset: any[] = [];
+    // @ts-ignore
     packages.forEach(({ package: _package, library, urls, renderUrls }) => {
+      // @ts-ignore
       libraryMap[_package] = library;
       if (renderUrls) {
         libraryAsset.push(renderUrls);
@@ -40,6 +39,7 @@ const SamplePreview = () => {
     const vendors = [assetBundle(libraryAsset, AssetLevel.Library)];
     const assetLoader = new AssetLoader();
     await assetLoader.load(libraryAsset);
+    // @ts-ignore
     const components = await injectComponents(buildComponents(libraryMap, componentsMap));
 
     setData({
@@ -54,15 +54,32 @@ const SamplePreview = () => {
     }, 200);
   }, [index]);
 
+  useEffect(() => {
+    document.onkeydown = (e) => {
+      switch(e.key) {
+        case 'ArrowLeft':
+          handleLastPage()
+          break
+        case 'ArrowRight':
+          handleNextPage()
+          break
+      }
+    }
+
+    
+  }, [])
+
   const handleLastPage = () => {
     if (index > 0) {
       setIndex(index - 1);
+      return
     }
     else message.warning('当前已是第一页~')
   }
   const handleNextPage = () => {
     if (index < list.length - 1) {
       setIndex(index + 1);
+      return
     }
     else message.warning('最后一页了~')
   }
@@ -75,27 +92,16 @@ const SamplePreview = () => {
   }
   
   return (
-    <div className="lowcode-plugin-sample-preview">
+    <div>
       <ReactRenderer
-        className="lowcode-plugin-sample-preview-content"
         schema={schema}
         components={components}
         appHelper={{
           requestHandlersMap: {
             fetch: createFetchHandler(),
-          },
+          }
         }}
       />
-      <div className="menu">
-        <LeftCircleOutlined
-          style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
-          onClick={() => handleLastPage()}
-        />
-        <RightCircleOutlined
-          style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
-          onClick={() => handleNextPage()}
-        />
-      </div>
     </div>
   );
 };
