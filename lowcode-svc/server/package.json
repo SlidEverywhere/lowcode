@@ -66,6 +66,6 @@
     "@/Services": "dist/Services",
     "@/utils": "dist/utils",
     "@/types": "dist/types",
-    "@/Code": "dist/code"
+    "@/code": "dist/code"
   }
 }
