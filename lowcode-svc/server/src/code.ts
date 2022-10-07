@@ -8,5 +8,7 @@ export enum Code {
   TOKEN_INVALID = 40004,
   // slide 相关
   SLIDE_NOT_FOUND = 40005,
-  PERMISSION_DENIED = 40006
+  PERMISSION_DENIED = 40006,
+  // play 相关
+  PLAY_NOT_FOUND = 40007
 }

@@ -10,9 +10,7 @@ export default class SlideServices {
     const slides = await SlideRepository.createQueryBuilder()
       .where({ user: uid })
       .getMany();
-    slides.forEach(slide => {
-      slide.content = JSON.parse(slide.content);
-    });
+
     return {
       code: Code.SUCCESS,
       message: '拉取成功',
@@ -28,7 +26,6 @@ export default class SlideServices {
       .where({ id })
       .getOne();
     if (slide) {
-      slide.content = JSON.parse(slide.content);
       return {
         code: Code.SUCCESS,
         message: '拉取成功',
@@ -45,11 +42,10 @@ export default class SlideServices {
     const SlideRepository = getManager().getRepository(Slide);
     const newSlide = Object.assign(new Slide(), {
       name: slideInfo.name,
-      content: JSON.stringify(slideInfo.content),
+      content: slideInfo.content,
       user
     });
     const slide = await SlideRepository.save(newSlide);
-    slide.content = JSON.parse(slide.content);
     delete slide.user;
     return {
       code: Code.SUCCESS,
@@ -96,10 +92,9 @@ export default class SlideServices {
       }
       Object.assign(slide, {
         name: slideInfo.name,
-        content: JSON.stringify(slideInfo.content)
+        content: slideInfo.content
       });
       delete slide.user;
-      slide.content = JSON.parse(slide.content);
       return {
         code: Code.SUCCESS,
         message: '更新成功',

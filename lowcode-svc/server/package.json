@@ -17,6 +17,7 @@
     "@koa/cors": "^3.1.0",
     "@koa/router": "^10.1.1",
     "@types/bcryptjs": "^2.4.2",
+    "@types/uuid": "^8.3.4",
     "@types/ws": "^8.5.3",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.10.7",
@@ -31,6 +32,7 @@
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.45",
+    "uuid": "^9.0.0",
     "ws": "^8.9.0"
   },
   "devDependencies": {
@@ -66,6 +68,7 @@
     "@/Services": "dist/Services",
     "@/utils": "dist/utils",
     "@/types": "dist/types",
-    "@/code": "dist/code"
+    "@/code": "dist/code",
+    "@/WebSocket": "dist/WebSocket"
   }
 }

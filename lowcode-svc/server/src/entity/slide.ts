@@ -18,10 +18,8 @@ export default class Slide {
   })
   name: string;
 
-  @Column({
-    default: ''
-  })
-  content: string;
+  @Column('simple-json')
+  content: any;
 
   @ManyToOne(type => User, user => user.slides, {
     cascade: true
@@ -32,6 +30,11 @@ export default class Slide {
     default: false
   })
   isPublished: boolean;
+
+  @Column({
+    default: false
+  })
+  isOnPlay: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
