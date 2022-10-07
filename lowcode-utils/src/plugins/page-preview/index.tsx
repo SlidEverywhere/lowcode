@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { PluginProps, ProjectSchema } from '@alilc/lowcode-types';
 import { project } from '@alilc/lowcode-engine';
-
+import html2canvas from 'html2canvas';
 import { C } from 'src/index';
 import './index.scss';
 
@@ -124,7 +124,7 @@ export interface Page {
 }
 
 const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
-  const { list, setList, setIndex } = useContext(C) as unknown as {
+  const { index, list, setList, setIndex } = useContext(C) as unknown as {
     list: Page[];
     setList: React.Dispatch<
       React.SetStateAction<
@@ -138,8 +138,17 @@ const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
     setIndex: React.Dispatch<React.SetStateAction<number>>;
   };
 
-  function editPage(event: Event) {
+  async function editPage(event: Event) {
+    // 首先保存当前页的canvas
+    const oldPage = document.querySelector('iframe') as HTMLElement
+    const canvas = await html2canvas(oldPage)
+    const preViewArea = document.querySelector(`#preview-${index}`) as HTMLElement
+    preViewArea.appendChild(canvas);
+    canvas.style.width = '100%'
+    canvas.style.height = '100%'
+    // @ts-ignore
     if (event.target.nodeName === 'IMG' || event.target.nodeName === 'LI') {
+      // @ts-ignore
       const idx = event.target.dataset['index'];
       project.importSchema(list[idx].schema);
       setIndex(idx);
@@ -158,10 +167,11 @@ const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
   }
   
   return (
+    // @ts-ignore
     <ul className="list-container" onClick={editPage}>
       {list.map(({ image }, index) => {
         return (
-          <li data-index={index} className="add">
+          <li data-index={index} className="add" id={`preview-${index}`}>
             {image ? <img src={image} data-index={index} /> : index + 1}
           </li>
         );
