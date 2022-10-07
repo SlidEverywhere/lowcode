@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { common, plugins, config, project, material } from '@alilc/lowcode-engine';
 import { Message } from '@alifd/next';
-import { project } from '@alilc/lowcode-engine';
+import 'antd/dist/antd.css';
 
 import registerPlugins from './universal/plugin';
 import './universal/global.scss';

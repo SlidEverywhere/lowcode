@@ -7,6 +7,8 @@ import { injectComponents } from '@alilc/lowcode-plugin-inject';
 import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler';
 
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
+import { message } from 'antd'
+import 'antd/dist/antd.css';
 
 import './preview.scss';
 
@@ -52,6 +54,19 @@ const SamplePreview = () => {
     }, 200);
   }, [index]);
 
+  const handleLastPage = () => {
+    if (index > 0) {
+      setIndex(index - 1);
+    }
+    else message.warning('当前已是第一页~')
+  }
+  const handleNextPage = () => {
+    if (index < list.length - 1) {
+      setIndex(index + 1);
+    }
+    else message.warning('最后一页了~')
+  }
+
   const { schema, components } = data;
 
   if (!schema || !components) {
@@ -74,19 +89,11 @@ const SamplePreview = () => {
       <div className="menu">
         <LeftCircleOutlined
           style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
-          onClick={() => {
-            if (index > 0) {
-              setIndex(index - 1);
-            }
-          }}
+          onClick={() => handleLastPage()}
         />
         <RightCircleOutlined
           style={{ fontSize: '40px', color: '#08c', cursor: 'pointer' }}
-          onClick={() => {
-            if (index < list.length - 1) {
-              setIndex(index + 1);
-            }
-          }}
+          onClick={() => handleNextPage()}
         />
       </div>
     </div>
