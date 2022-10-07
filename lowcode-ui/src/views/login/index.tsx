@@ -25,30 +25,40 @@ function Index() {
 		form.validateFields().then((values: any) => {
 			console.log(values)
 			const { username, password } = values
-			setTimeout(() => {
+			// setTimeout(() => {
 				// const ticket = 'token123'
-				// 请求登录接口
-				// 我不知道该怎么获取输入的username和password，我知道得传参
+				// 先请求登录接口
 				api
-					.login({ username, password })
+					.register({ username, password })
 					.then((res: any) => {
 						if (res.code === 2000) {
 							const data = res.data || {}
 							userStore.setTicket(data.token)
+						}else {
+							// 请求登录接口
+							api
+							.login({ username, password })
+							.then((res: any) => {
+								if (res.code === 2000) {
+									const data = res.data || {}
+									userStore.setTicket(data.token)
+								}
+							})
 						}
-					})
-					.catch((err) => {
+					}).catch((err) => {
 						console.log(err)
 					})
+				
+					
 
 				// userStore.setTicket(ticket)
 				if (redirectUrl) {
 					const path = getRoutePath(redirectUrl, true)
 					navigate(path)
 				} else {
-					navigate('/index')
+					// navigate('/index')
 				}
-			}, 200)
+			// }, 200)
 		})
 	}
 
@@ -72,6 +82,7 @@ function Index() {
 							),
 							message: '请输入11位电话号',
 						},
+						{ required: true, message: '必填' }
 					]}>
 					<Input prefix={<UserOutlined />} placeholder='请输入电话号' />
 				</Form.Item>
