@@ -1,17 +1,20 @@
 import ReactDOM from 'react-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Loading } from '@alifd/next';
 import { buildComponents, assetBundle, AssetLevel, AssetLoader } from '@alilc/lowcode-utils';
 import ReactRenderer from '@alilc/lowcode-react-renderer';
 import { injectComponents } from '@alilc/lowcode-plugin-inject';
 import { createFetchHandler } from '@alilc/lowcode-datasource-fetch-handler';
-
+// @ts-ignore
+import { beFull } from 'be-full';
 import { message } from 'antd'
+
 import 'antd/dist/antd.css';
 
 const SamplePreview = () => {
   const [data, setData] = useState<any>({});
   const [index, setIndex] = useState(0);
+  const btnRef = useRef<HTMLButtonElement | null | undefined>()
   const list = JSON.parse(window.localStorage.getItem('projectSchemaList') as string);
 
   async function init() {
@@ -60,28 +63,29 @@ const SamplePreview = () => {
         case 'ArrowLeft':
           handleLastPage()
           break
+        case 'Enter':
+          btnRef.current?.click()
+          break
         case 'ArrowRight':
           handleNextPage()
           break
       }
     }
-
-    
-  }, [])
+  })
 
   const handleLastPage = () => {
     if (index > 0) {
       setIndex(index - 1);
       return
     }
-    else message.warning('当前已是第一页~')
+    message.warning('当前已是第一页~')
   }
   const handleNextPage = () => {
     if (index < list.length - 1) {
       setIndex(index + 1);
       return
     }
-    else message.warning('最后一页了~')
+    message.warning('最后一页了~')
   }
 
   const { schema, components } = data;
@@ -94,6 +98,7 @@ const SamplePreview = () => {
   return (
     <div>
       <ReactRenderer
+        // @ts-ignore
         schema={schema}
         components={components}
         appHelper={{
@@ -102,6 +107,7 @@ const SamplePreview = () => {
           }
         }}
       />
+      <button ref={btnRef} onClick={()=> beFull()} style={{opacity: '0', height: '0'}}></button>
     </div>
   );
 };

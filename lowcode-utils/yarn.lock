@@ -3560,6 +3560,11 @@ batch@0.6.1:
   resolved "https://registry.npmmirror.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
   integrity sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==
 
+be-full@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.npmmirror.com/be-full/-/be-full-0.1.4.tgz#19052d46e81a4bc801ba1f1dfede34e59941389c"
+  integrity sha512-Nj3yBvk8rxhBhDv6YROxP9ynTA5H0l9lMjU+XqEAY4rTLJ68l2+n0geWCoeTqAxhOFedtbmYCpxFzMxMA8CnUg==
+
 bfj@^6.1.1:
   version "6.1.2"
   resolved "https://registry.npmmirror.com/bfj/-/bfj-6.1.2.tgz#325c861a822bcb358a41c78a33b8e6e2086dde7f"
