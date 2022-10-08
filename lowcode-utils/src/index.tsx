@@ -6,7 +6,8 @@ import 'antd/dist/antd.css';
 
 import registerPlugins from './universal/plugin';
 import './universal/global.scss';
-import { fetchSchema } from 'src/universal/utils'
+import { fetchSchema } from 'src/universal/utils';
+import html2canvas from 'html2canvas';
 
 export const C = createContext(null);
 
@@ -36,11 +37,23 @@ export const C = createContext(null);
         meta[index].packages = material.getAssets().packages;
         setList([...meta]);
         window.localStorage.setItem('projectSchemaList', JSON.stringify(list));
+        domChange();
         Message.success('成功保存到本地');
         return false;
       }
     };
     document.onkeydown = keyDown;
+    const domChange = async () => {
+      //@ts-ignore
+      const iframe = document
+        .querySelector('iframe')
+        ?.contentDocument.getElementsByTagName('body')[0] as HTMLElement;
+      const url = await (await html2canvas(iframe)).toDataURL();
+      const preViewArea = document.querySelector(`#preview-${index}`) as HTMLElement;
+      preViewArea.style.backgroundImage = `url(${url})`;
+      preViewArea.style.backgroundRepeat = 'no-repeat';
+      preViewArea.style.backgroundSize = '100% 100%';
+    };
     useEffect(() => {
       plugins
         .init()
@@ -48,15 +61,15 @@ export const C = createContext(null);
           setHasPluginInited(true);
         })
         .catch((err) => console.error(err));
-        // fetchSchema()
+      // fetchSchema()
 
-        // 模拟云端获取 schema
-        const listJSON = window.localStorage.getItem('projectSchemaList') as string
-        const list = JSON.parse(listJSON)
-        setList(list)
-        project.importSchema(list[index].schema);
+      // 模拟云端获取 schema
+      const listJSON = window.localStorage.getItem('projectSchemaList') as string;
+      const list = JSON.parse(listJSON);
+      setList(list);
+      project.importSchema(list[index].schema);
     }, []);
-    
+
     return hasPluginInited ? (
       // @ts-ignore
       <C.Provider value={{ index, setIndex, list, setList }}>

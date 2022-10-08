@@ -139,13 +139,6 @@ const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
   };
 
   async function editPage(event: Event) {
-    // 首先保存当前页的canvas
-    const oldPage = document.querySelector('iframe') as HTMLElement
-    const canvas = await html2canvas(oldPage)
-    const preViewArea = document.querySelector(`#preview-${index}`) as HTMLElement
-    preViewArea.appendChild(canvas);
-    canvas.style.width = '100%'
-    canvas.style.height = '100%'
     // @ts-ignore
     if (event.target.nodeName === 'IMG' || event.target.nodeName === 'LI') {
       // @ts-ignore
@@ -165,7 +158,7 @@ const PagePreview: React.FC<PluginProps> = (props): React.ReactElement => {
       },
     ]);
   }
-  
+
   return (
     // @ts-ignore
     <ul className="list-container" onClick={editPage}>
