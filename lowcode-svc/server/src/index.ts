@@ -12,19 +12,29 @@ import { protectedRouter, unprotectedRouter } from '@/router';
 import logger from '@/MiddleWare/logger';
 import errorHandler from '@/MiddleWare/errorHandler';
 
-// 从根目录下的 .env 文件中加载环境变量
 dotenv.config({ path: '.env' });
 
-const app = new Koa();
 createConnection()
   .then(() => {
-    // 初始化 Koa 应用实例
-    app
+    new Koa()
       .use(errorHandler)
       .use(logger())
       .use(
         cors({
-          origin: 'http://localhost:3000',
+          origin: ctx => {
+            //设置允许来自指定域名请求
+            const whiteList = [
+              'http://localhost:3000',
+              'https://slideverywhere.xav1er.com',
+              'https://slideverywhere-play.xav1er.com'
+            ];
+            const origin = ctx.header.referer.match(
+              /https?:\/\/[\w,\.,\:]+\//
+            )[0];
+            const url = origin.substring(0, origin.length - 1);
+            console.log(ctx.header.referer, ' ', url);
+            return whiteList.includes(url) ? url : 'http://localhost:3000';
+          },
           credentials: true
         })
       )
@@ -38,14 +48,9 @@ createConnection()
           }
         })
       )
-      // 无需 JWT Token 即可访问
       .use(unprotectedRouter.routes())
-      // 注册 JWT 中间件
       .use(jwt({ secret: process.env.SECRET }).unless({ path: [/\..+$/] }))
-      // 需要 JWT Token 才可访问
       .use(protectedRouter.routes())
-
-      // 运行服务器
       .listen(8002, () => {
         console.log('Koa server is running at http://localhost:8002/');
       });
