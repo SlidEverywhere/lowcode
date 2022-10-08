@@ -58,6 +58,10 @@ const SamplePreview = () => {
   }, [index]);
 
   useEffect(() => {
+    message.success("按左箭头上一张，右箭头下一张。回车键全屏哦~")
+  }, [])
+
+  useEffect(() => {
     document.onkeydown = (e) => {
       switch(e.key) {
         case 'ArrowLeft':
