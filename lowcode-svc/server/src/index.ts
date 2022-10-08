@@ -21,7 +21,20 @@ createConnection()
       .use(logger())
       .use(
         cors({
-          origin: 'http://localhost:3000',
+          origin: ctx => {
+            //设置允许来自指定域名请求
+            const whiteList = [
+              'http://localhost:3000',
+              'https://slideverywhere.xav1er.com',
+              'https://slideverywhere-play.xav1er.com'
+            ];
+            const origin = ctx.header.referer.match(
+              /https?:\/\/[\w,\.,\:]+\//
+            )[0];
+            const url = origin.substring(0, origin.length - 1);
+            console.log(ctx.header.referer, ' ', url);
+            return whiteList.includes(url) ? url : 'http://localhost:3000';
+          },
           credentials: true
         })
       )
