@@ -36,7 +36,6 @@ createConnection()
               /https?:\/\/[\w,\.,\:]+\//
             )[0];
             const url = origin.substring(0, origin.length - 1);
-            console.log(ctx.header.referer, ' ', url);
             return whiteList.includes(url) ? url : 'http://localhost:3000';
           },
           credentials: true

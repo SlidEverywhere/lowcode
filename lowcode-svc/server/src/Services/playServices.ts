@@ -5,9 +5,9 @@ import { actions } from '@/types/play';
 import { getManager } from 'typeorm';
 import Slide from '@/entity/slide';
 import { findKey } from '@/utils/play';
-export default class PlayServices {
-  public static SessionMap = new Map<string, string>();
+import { SessionMap } from '@/utils/play';
 
+export default class PlayServices {
   public static async startPlay(id: string, currentPage = 0) {
     const SlideRepository = getManager().getRepository(Slide);
     const slide = await SlideRepository.createQueryBuilder()
@@ -15,9 +15,9 @@ export default class PlayServices {
       .getOne();
 
     if (slide) {
-      if (slide.isOnPlay) PlayServices.SessionMap.delete(id);
+      if (slide.isOnPlay) SessionMap.delete(id);
       const sessionId = uuidv4();
-      PlayServices.SessionMap.set(id, sessionId);
+      SessionMap.set(id, sessionId);
       slide.isOnPlay = true;
       slide.currentPage = currentPage;
       await SlideRepository.save(slide);
@@ -53,7 +53,7 @@ export default class PlayServices {
         message: '未开启放映'
       };
     }
-    const sessionId = PlayServices.SessionMap.get(id);
+    const sessionId = SessionMap.get(id);
     if (sessionId) {
       return {
         code: Code.SUCCESS,
@@ -77,7 +77,7 @@ export default class PlayServices {
     action: actions,
     payload?: number
   ) {
-    const id = findKey(PlayServices.SessionMap, sessionId);
+    const id = findKey(SessionMap, sessionId);
     if (!id) {
       return {
         code: Code.SESSION_EXPIRED,
@@ -127,10 +127,10 @@ export default class PlayServices {
         message: '幻灯片不存在'
       };
     }
-    const sessionId = PlayServices.SessionMap.get(id);
+    const sessionId = SessionMap.get(id);
     if (sessionId) {
       broadcast<{ action: actions }>({ action: 'STOP' }, sessionId);
-      PlayServices.SessionMap.delete(id);
+      SessionMap.delete(id);
       slide.isOnPlay = false;
       await SlideRepository.save(slide);
       return {

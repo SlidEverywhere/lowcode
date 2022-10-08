@@ -16,7 +16,7 @@ const protectedRouter = new Router()
   .use('/auth', tokenValidate.routes(), tokenValidate.allowedMethods())
   .use('/file', fileRoutes.routes(), fileRoutes.allowedMethods())
   .use('/user', userRoutes.routes(), userRoutes.allowedMethods())
-  .use('/play', playRoutes.routes(), playRoutes.allowedMethods())
-  .use('/slide', slideRoutes.routes(), slideRoutes.allowedMethods());
+  .use('/slide', slideRoutes.routes(), slideRoutes.allowedMethods())
+  .use('/play', playRoutes.routes(), playRoutes.allowedMethods());
 
 export { protectedRouter, unprotectedRouter };
