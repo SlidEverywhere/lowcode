@@ -25,30 +25,68 @@ function Index() {
 		form.validateFields().then((values: any) => {
 			console.log(values)
 			const { username, password } = values
-			setTimeout(() => {
+			// setTimeout(() => {
 				// const ticket = 'token123'
-				// 请求登录接口
-				// 我不知道该怎么获取输入的username和password，我知道得传参
+				// 先请求注册接口
 				api
-					.login({ username, password })
+					.register({ username, password })
 					.then((res: any) => {
+						// console.log('111');
+						console.log('注册'+res.code);
+						
+						
 						if (res.code === 2000) {
+							console.log('注册成功直接跳转'+ res.data.token);
+							
 							const data = res.data || {}
+							
 							userStore.setTicket(data.token)
+
+							// api.getUserInfo(data.token).then((res: any) => {
+									// 	const data = res.data || {}
+									// 	console.log(data);
+										
+									// 	userStore.setUserInfo(data.user)
+									// 	console.log(userStore);
+									// })
+							// console.log(userStore);
+							navigate('/index')
+							
+						}else {
+							// 请求登录接口
+							api
+							.login({ username, password })
+							.then((res: any) => {
+								console.log('登录',res.code);
+								
+								if (res.code === 2000) {
+									const data = res.data || {}
+									userStore.setTicket(data.token)
+
+									// api.getUserInfo(data.token).then((res: any) => {
+									// 	const data = res.data || {}
+									// 	console.log(data);
+										
+									// 	userStore.setUserInfo(data.user)
+									// 	console.log(userStore);
+									// })
+									console.log('登陆成功');
+									navigate('/index')
+									// console.log(userStore);
+									// console.log(userStore.ticket);
+									
+								}
+							})
 						}
-					})
-					.catch((err) => {
+					}).catch((err) => {
 						console.log(err)
 					})
+				
+					
 
 				// userStore.setTicket(ticket)
-				if (redirectUrl) {
-					const path = getRoutePath(redirectUrl, true)
-					navigate(path)
-				} else {
-					navigate('/index')
-				}
-			}, 200)
+
+			// }, 200)
 		})
 	}
 
@@ -72,6 +110,7 @@ function Index() {
 							),
 							message: '请输入11位电话号',
 						},
+						{ required: true, message: '必填' }
 					]}>
 					<Input prefix={<UserOutlined />} placeholder='请输入电话号' />
 				</Form.Item>
