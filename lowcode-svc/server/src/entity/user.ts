@@ -2,15 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
-import Slide from './slide';
+
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn('uuid')
-  uid: string;
+  uid: number;
 
   @Column()
   username: string;
@@ -41,9 +40,6 @@ export default class User {
     default: ''
   })
   nickname: string;
-
-  @OneToMany(type => Slide, slide => slide.user)
-  slides: Slide[];
 
   @CreateDateColumn()
   createdAt: Date;
