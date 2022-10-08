@@ -13,7 +13,9 @@ export default class PlayServices {
     const slide = await SlideRepository.createQueryBuilder()
       .where({ id })
       .getOne();
+
     if (slide) {
+      if (slide.isOnPlay) PlayServices.SessionMap.delete(id);
       const sessionId = uuidv4();
       PlayServices.SessionMap.set(id, sessionId);
       slide.isOnPlay = true;
@@ -62,6 +64,8 @@ export default class PlayServices {
         }
       };
     }
+    slide.isOnPlay = false;
+    await SlideRepository.save(slide);
     return {
       code: Code.PLAY_NOT_FOUND,
       message: '会话已销毁'
@@ -74,7 +78,6 @@ export default class PlayServices {
     payload?: number
   ) {
     const id = findKey(PlayServices.SessionMap, sessionId);
-    console.log('id', id);
     if (!id) {
       return {
         code: Code.SESSION_EXPIRED,
@@ -139,5 +142,14 @@ export default class PlayServices {
       code: Code.PLAY_NOT_FOUND,
       message: '未开启放映'
     };
+  }
+
+  public static async stopAll() {
+    const slideRepository = getManager().getRepository(Slide);
+    const slides = await slideRepository.createQueryBuilder().getMany();
+    slides.forEach(async slide => {
+      slide.isOnPlay = false;
+      await slideRepository.save(slide);
+    });
   }
 }
