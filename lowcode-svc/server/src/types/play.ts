@@ -1,1 +1,1 @@
-export type actions = 'NEXT' | 'PREV' | 'STOP';
+export type actions = 'NEXT' | 'PREV' | 'STOP' | 'GOTO';

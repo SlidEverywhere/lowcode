@@ -36,6 +36,11 @@ export default class Slide {
   })
   isOnPlay: boolean;
 
+  @Column({
+    default: 0
+  })
+  currentPage: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
