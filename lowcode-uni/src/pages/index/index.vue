@@ -6,7 +6,7 @@
 				<view >
 					<view class="uni-form-item uni-column">
 						<view class="title">手机号:</view>
-						<input class="uni-input" type="number" v-model="formData.phone" placeholder="请输入手机号" />
+						<input class="uni-input" type="number" v-model="formData.username" placeholder="请输入手机号" />
 					</view>
 					
 					<view class="uni-form-item uni-column">
@@ -20,7 +20,9 @@
 				</view>
 			</view>
 			
-			
+			<uni-popup ref="message" type="message">
+							<uni-popup-message type="error" :message="messageText" :duration="2000"></uni-popup-message>
+						</uni-popup>
 			</form>
 	</view>
 </template>
@@ -28,13 +30,25 @@
 <script setup lang="ts">
 	import {
 		ref,
-		reactive
+		reactive,
 	} from 'vue'
 	import {login} from '@/api/login'
-	const formData= reactive({phone:'',password:''})
+	const messageText = ref('')
+	const message = ref(null)
+	const formData= reactive({username:'',password:''})
 	const  formSubmit = async() => {
 		console.log(formData)
 		const {data} = await login(formData)
+		if(data.code===2000){
+			uni.redirectTo({
+				url: '../PPTList/PPTList'
+			});
+			console.log(data)
+			return
+		}
+		
+		
+		
 	}
 	const formReset = () => {
 		console.log('清除成功')
