@@ -1,74 +1,81 @@
 import { Code } from '@/code';
 import { broadcast } from '@/WebSocket';
-import { v4 as uuidv4 } from 'uuid';
 import { actions } from '@/types/play';
 import { getManager } from 'typeorm';
 import Slide from '@/entity/slide';
-import { findKey } from '@/utils/play';
-import { SessionMap } from '@/utils/play';
+import Session from '@/entity/session';
 
 export default class PlayServices {
   public static async startPlay(id: string, currentPage = 0) {
-    const SlideRepository = getManager().getRepository(Slide);
-    const slide = await SlideRepository.createQueryBuilder()
-      .where({ id })
+    const slide = await getManager()
+      .getRepository(Slide)
+      .createQueryBuilder('slide')
+      .leftJoinAndSelect('slide.session', 'session')
+      .where('slide.id = :id', { id })
+      .addSelect('slide.content')
       .getOne();
 
-    if (slide) {
-      if (slide.isOnPlay) SessionMap.delete(id);
-      const sessionId = uuidv4();
-      SessionMap.set(id, sessionId);
-      slide.isOnPlay = true;
-      slide.currentPage = currentPage;
-      await SlideRepository.save(slide);
-      return {
-        code: Code.SUCCESS,
-        message: '已开启放映',
-        data: {
-          sessionId,
-          slide
-        }
-      };
-    }
-    return {
-      code: Code.SLIDE_NOT_FOUND,
-      message: '幻灯片不存在'
-    };
-  }
-
-  public static async joinPlay(id: string) {
-    const SlideRepository = getManager().getRepository(Slide);
-    const slide = await SlideRepository.createQueryBuilder()
-      .where({ id })
-      .getOne();
     if (!slide) {
       return {
         code: Code.SLIDE_NOT_FOUND,
         message: '幻灯片不存在'
       };
     }
-    if (!slide.isOnPlay) {
+
+    // 如果幻灯片已经在放映，返回现有的 sessionId
+    if (slide.isOnPlay) {
       return {
-        code: Code.PLAY_NOT_FOUND,
-        message: '未开启放映'
+        code: Code.PLAY_ALREADY_STARTED,
+        message: '放映不得重复开启'
       };
     }
-    const sessionId = SessionMap.get(id);
-    if (sessionId) {
-      return {
-        code: Code.SUCCESS,
-        message: '已加入放映',
-        data: {
-          sessionId,
-          slide
-        }
-      };
-    }
-    slide.isOnPlay = false;
-    await SlideRepository.save(slide);
+
+    // 如果幻灯片不在放映，创建新的 session
+    slide.isOnPlay = true;
+    const session = Object.assign(new Session(), {
+      slide,
+      currentPage
+    });
+    await getManager().getRepository(Session).save(session);
     return {
-      code: Code.PLAY_NOT_FOUND,
-      message: '会话已销毁'
+      code: Code.SUCCESS,
+      message: '已开启放映',
+      data: {
+        sessionId: session.sessionId,
+        slide
+      }
+    };
+  }
+
+  public static async joinPlay(id: string) {
+    const session = await getManager()
+      .getRepository(Session)
+      .createQueryBuilder('session')
+      .where('session.slide.id = :id', { id })
+      .getOne();
+
+    if (!session) {
+      return {
+        code: Code.SESSION_EXPIRED,
+        message: '会话已过期'
+      };
+    }
+
+    const slide = await getManager()
+      .getRepository(Slide)
+      .createQueryBuilder('slide')
+      .where('slide.id = :id', { id })
+      .addSelect('slide.content')
+      .getOne();
+
+    return {
+      code: Code.SUCCESS,
+      message: '已加入放映',
+      data: {
+        sessionId: session.sessionId,
+        currentPage: session.currentPage,
+        slide
+      }
     };
   }
 
@@ -77,79 +84,112 @@ export default class PlayServices {
     action: actions,
     payload?: number
   ) {
-    const id = findKey(SessionMap, sessionId);
-    if (!id) {
+    const SessionRepository = getManager().getRepository(Session);
+    const session = await SessionRepository.createQueryBuilder('session')
+      .leftJoinAndSelect('session.slide', 'slide')
+      .where('session.sessionId = :sessionId', { sessionId })
+      .getOne();
+
+    if (!session) {
       return {
         code: Code.SESSION_EXPIRED,
         message: '会话已过期'
       };
     }
-    const SlideRepository = getManager().getRepository(Slide);
-    const slide = await SlideRepository.createQueryBuilder()
-      .where({ id })
+
+    const slide = await getManager()
+      .getRepository(Slide)
+      .createQueryBuilder('slide')
+      .where('slide.id = :id', { id: session.slide.id })
+      .addSelect('slide.content')
       .getOne();
-    if (!slide) {
-      return {
-        code: Code.SLIDE_NOT_FOUND,
-        message: '幻灯片不存在'
-      };
+
+    switch (action) {
+      case 'NEXT':
+        if (session.currentPage < slide.content.length - 1) {
+          session.currentPage += 1;
+          await SessionRepository.save(session);
+          broadcast<{ action: actions; currentPage: number }>(
+            { action, currentPage: session.currentPage },
+            sessionId
+          );
+          return {
+            code: Code.SUCCESS,
+            message: '已切换到下一页'
+          };
+        }
+        return {
+          code: Code.PAGE_OUT_OF_RANGE,
+          message: '已经是最后一页'
+        };
+      case 'PREV':
+        if (session.currentPage > 0) {
+          session.currentPage -= 1;
+          await SessionRepository.save(session);
+          broadcast<{ action: actions; currentPage: number }>(
+            { action, currentPage: session.currentPage },
+            sessionId
+          );
+          return {
+            code: Code.SUCCESS,
+            message: '已切换到上一页'
+          };
+        }
+        return {
+          code: Code.PAGE_OUT_OF_RANGE,
+          message: '已经是第一页'
+        };
+      case 'GOTO':
+        if (
+          payload !== undefined &&
+          payload >= 0 &&
+          payload < slide.content.length
+        ) {
+          session.currentPage = payload;
+          await SessionRepository.save(session);
+          broadcast<{ action: actions; currentPage: number }>(
+            { action, currentPage: session.currentPage },
+            sessionId
+          );
+          return {
+            code: Code.SUCCESS,
+            message: `已切换到第 ${payload} 页`
+          };
+        }
+        return {
+          code: Code.PAGE_OUT_OF_RANGE,
+          message: '页码超出范围'
+        };
+      default:
+        return {
+          code: Code.ACTION_INVALID,
+          message: '无效的操作'
+        };
     }
-    if (!slide.isOnPlay) {
-      return {
-        code: Code.PLAY_NOT_FOUND,
-        message: '未开启放映'
-      };
-    }
-    if (action === 'NEXT') slide.currentPage += 1;
-    if (action === 'PREV') slide.currentPage -= 1;
-    if (action === 'GOTO') {
-      if (payload) slide.currentPage = payload;
-    }
-    await SlideRepository.save(slide);
-    broadcast<{ action: actions; currentPage: number }>(
-      { action, currentPage: slide.currentPage },
-      sessionId
-    );
-    return {
-      code: Code.SUCCESS,
-      message: '已发送指令'
-    };
   }
 
   public static async stopPlay(id: string) {
-    const SlideRepository = getManager().getRepository(Slide);
-    const slide = await SlideRepository.createQueryBuilder()
-      .where({ id })
+    const sessionRepository = getManager().getRepository(Session);
+    const session = await sessionRepository
+      .createQueryBuilder('session')
+      .where('session.slide.id = :id', { id })
       .getOne();
-    if (!slide) {
-      return {
-        code: Code.SLIDE_NOT_FOUND,
-        message: '幻灯片不存在'
-      };
-    }
-    const sessionId = SessionMap.get(id);
-    if (sessionId) {
-      broadcast<{ action: actions }>({ action: 'STOP' }, sessionId);
-      SessionMap.delete(id);
-      slide.isOnPlay = false;
-      await SlideRepository.save(slide);
-      return {
-        code: Code.SUCCESS,
-        message: '已关闭放映'
-      };
-    }
-    return {
-      code: Code.PLAY_NOT_FOUND,
-      message: '未开启放映'
-    };
-  }
 
-  public static async stopAll() {
+    if (!session) {
+      return {
+        code: Code.SESSION_EXPIRED,
+        message: '会话已过期'
+      };
+    }
     const slideRepository = getManager().getRepository(Slide);
-    const slides = await slideRepository.createQueryBuilder().getMany();
-    slides.forEach(async slide => {
-      slide.isOnPlay = false;
-      await slideRepository.save(slide);
-    });
+    const slide = await slideRepository.findOne(id);
+    slide.isOnPlay = false;
+    await slideRepository.save(slide);
+    await sessionRepository.remove(session);
+
+    return {
+      code: Code.SUCCESS,
+      message: '已结束放映'
+    };
   }
 }

@@ -16,9 +16,9 @@ import PlayServices from '@/Services/playServices';
 dotenv.config({ path: '.env' });
 
 createConnection()
-  .then(async () => {
-    await PlayServices.stopAll();
-  })
+  // .then(async () => {
+  //   await PlayServices.stopAll();
+  // })
   .then(() => {
     new Koa()
       .use(errorHandler)

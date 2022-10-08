@@ -1,8 +1,8 @@
 import "./App.css";
 
-// const host = "ws://localhost:8003";
-const host = "wss://slideverywhere-ws.xav1er.com";
-const sessionID = "910841bd-2d34-4ee7-a8ca-fefa7c977682";
+const host = "ws://localhost:8003";
+// const host = "wss://slideverywhere-ws.xav1er.com";
+const sessionID = "a66ff0de-fbb2-4b86-a7a5-af0d10eccd01";
 
 function App() {
   const ws = new WebSocket(`${host}?sessionId=${sessionID}`);

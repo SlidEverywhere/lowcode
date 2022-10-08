@@ -4,6 +4,6 @@ export interface ISlideInfo {
 }
 
 export interface ISlideData {
-  thumb: string;
-  content: Object;
+  image: string;
+  schema: Object;
 }
