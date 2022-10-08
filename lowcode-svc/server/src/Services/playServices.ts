@@ -14,7 +14,6 @@ export default class PlayServices {
       .where({ id })
       .getOne();
     if (slide) {
-      if (slide.isOnPlay) PlayServices.SessionMap.delete(id);
       const sessionId = uuidv4();
       PlayServices.SessionMap.set(id, sessionId);
       slide.isOnPlay = true;
@@ -75,6 +74,7 @@ export default class PlayServices {
     payload?: number
   ) {
     const id = findKey(PlayServices.SessionMap, sessionId);
+    console.log('id', id);
     if (!id) {
       return {
         code: Code.SESSION_EXPIRED,
