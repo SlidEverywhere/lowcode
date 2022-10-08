@@ -1,7 +1,7 @@
 import './page403.less'
 import { Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import tools from 'src/utils/tools'
+import tools from '@/utils/tools'
 
 function Page403 () {
   const query = tools.getQueryObject()
