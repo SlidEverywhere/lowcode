@@ -11,7 +11,20 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "PPT列表",
-                "enablePullDownRefresh": true
+                "enablePullDownRefresh": true,
+				"navigationBarTextStyle":"white",
+				"navigationBarBackgroundColor":"#1C1C1C"
+            }
+            
+        }
+        ,{
+            "path" : "pages/UsePPT/UsePPT",
+            "style" :                                                                                    
+            {
+       "navigationBarTitleText": "放映PPT",
+       "enablePullDownRefresh": true,
+       "navigationBarTextStyle":"white",
+       "navigationBarBackgroundColor":"#1C1C1C"
             }
             
         }

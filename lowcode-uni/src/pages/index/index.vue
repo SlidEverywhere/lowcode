@@ -40,6 +40,11 @@
 		console.log(formData)
 		const {data} = await login(formData)
 		if(data.code===2000){
+			try {
+				uni.setStorageSync('token', data.data.token);
+			} catch (e) {
+				// error
+			}
 			uni.redirectTo({
 				url: '../PPTList/PPTList'
 			});
