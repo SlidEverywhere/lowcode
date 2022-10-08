@@ -31,7 +31,7 @@
 			console.log(PPTlist.value)
 		}
 	}
-	function getPPT(Id){
+	function getPPT(Id:any){
 		uni.navigateTo({
 			url:`../UsePPT/UsePPT?PPTId=${Id}`
 		})
