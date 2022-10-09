@@ -10,14 +10,16 @@
 					<h2 v-show="!nextpage" class='next-image'  >已经是最后一页</h2>
 					<view class="button">
 						<button  type="default" class="btn retreat-btn"  hover-class="btn-hover" plain="true" @click="retreat">&lt;</button>
-						<button  type="default" class="btn retreat-btn"  hover-class="btn-hover" plain="true" @click="go">&gt;</button>
+						<button  type="default" class="btn next-btn"  hover-class="btn-hover" plain="true" @click="go">&gt;</button>
+						<button  type="default" class="btn end-btn"  hover-class="end-hover" plain="true" @click="end">结束</button>
+						
 					</view>
 	</view>
 </template>
 
 <script lang="ts" setup>
 	import {getUrlParam} from '@/api/url'
-	import {join,control} from '@/api/ppT'
+	import {join,control,stop} from '@/api/ppT'
 import { ref } from 'vue';
 	const Id = getUrlParam('PPTId')
 	let sessionId:string 
@@ -54,6 +56,13 @@ import { ref } from 'vue';
 		}
 		
 	}
+	async function end(){
+		const {data}= await stop({},sessionId)
+		if(data.code===2000){
+			uni.navigateBack()
+		}
+		
+	}
 	usePPT()
 </script>
 
@@ -86,15 +95,55 @@ h2.next-image {
 	height: auto;
 }
 .button{
+	position: relative;
 	display: flex;
 	margin-top: 20px;
+	/* background-color: #fff; */
+	width: 60vw;
+	height: 60vw;
+	margin: auto;
+	margin-top: 15px;
+	border-radius:50% ;
+	overflow: hidden;
+	border: 1px solid #000;
 }
 .button .btn{
-	border: 1px solid #eee;
+	border: 1px solid #000;
+	background-color: #1c1c1c;
+	width: 30vw;
 	color: #eee;
+	display: flex;
+	align-items: center;
+	font-size: 50px;
 }
+.button .retreat-btn{
+	justify-content: start;
+}
+.button .next-btn{
+	justify-content: end;
+}
+.button .end-btn{
+	position: absolute;
+	height: 30vw;
+	width:30vw ;
+	border-radius: 50%;
+	font-size: 30px;
+	align-items: center;
+	justify-content: center;
+	left: 50%;
+	top: 50%;
+	background-color: #828282;
+	transform: translate(-50%,-50%);
+}
+
 .button .btn-hover{
-	border: 1px solid #999;
+	/* border: 1px solid #999; */
 	color: #999;
+	background-color: #363636;
+	
+}
+.button .end-hover{
+	color: #1c1c1c;
+	background-color: #9C9C9C;
 }
 </style>

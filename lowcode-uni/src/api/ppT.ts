@@ -10,3 +10,7 @@ export function join(data:string){
 export function control(data={},Id:string){
 	return request({url:`/play/control/${data}`,method:'POST',data:data})
 }
+// /play/stop/{id}
+export function stop(data={},Id:string){
+	return request({url:`/play/stop/${data}`,method:'POST',data:data})
+}
