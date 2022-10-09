@@ -88,6 +88,7 @@ export default class PlayServices {
     const session = await SessionRepository.createQueryBuilder('session')
       .leftJoinAndSelect('session.slide', 'slide')
       .where('session.sessionId = :sessionId', { sessionId })
+      .addSelect('slide.content')
       .getOne();
 
     if (!session) {
@@ -97,16 +98,9 @@ export default class PlayServices {
       };
     }
 
-    const slide = await getManager()
-      .getRepository(Slide)
-      .createQueryBuilder('slide')
-      .where('slide.id = :id', { id: session.slide.id })
-      .addSelect('slide.content')
-      .getOne();
-
     switch (action) {
       case 'NEXT':
-        if (session.currentPage < slide.content.length - 1) {
+        if (session.currentPage < session.slide.content.length - 1) {
           session.currentPage += 1;
           await SessionRepository.save(session);
           broadcast<{ action: actions; currentPage: number }>(
@@ -143,7 +137,7 @@ export default class PlayServices {
         if (
           payload !== undefined &&
           payload >= 0 &&
-          payload < slide.content.length
+          payload < session.slide.content.length
         ) {
           session.currentPage = payload;
           await SessionRepository.save(session);
