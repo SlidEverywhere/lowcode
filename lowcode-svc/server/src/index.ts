@@ -11,10 +11,14 @@ import 'reflect-metadata';
 import { protectedRouter, unprotectedRouter } from '@/router';
 import logger from '@/MiddleWare/logger';
 import errorHandler from '@/MiddleWare/errorHandler';
+import PlayServices from '@/Services/playServices';
 
 dotenv.config({ path: '.env' });
 
 createConnection()
+  // .then(async () => {
+  //   await PlayServices.stopAll();
+  // })
   .then(() => {
     new Koa()
       .use(errorHandler)
@@ -32,7 +36,6 @@ createConnection()
               /https?:\/\/[\w,\.,\:]+\//
             )[0];
             const url = origin.substring(0, origin.length - 1);
-            console.log(ctx.header.referer, ' ', url);
             return whiteList.includes(url) ? url : 'http://localhost:3000';
           },
           credentials: true

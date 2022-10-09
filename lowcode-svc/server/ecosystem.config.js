@@ -14,8 +14,7 @@ module.exports = {
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       merge_logs: false,
       env_production: {
-        NODE_ENV: 'production',
-        PORT: 8080
+        NODE_ENV: 'production'
       },
       ignore_watch: ['logs'] //忽略监听log文件夹
     }

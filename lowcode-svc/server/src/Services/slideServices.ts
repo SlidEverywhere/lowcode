@@ -22,9 +22,11 @@ export default class SlideServices {
 
   public static async getSlide(id: string) {
     const SlideRepository = getManager().getRepository(Slide);
-    const slide = await SlideRepository.createQueryBuilder()
-      .where({ id })
+    const slide = await SlideRepository.createQueryBuilder('slide')
+      .where('slide.id = :id', { id })
+      .addSelect('slide.content')
       .getOne();
+
     if (slide) {
       return {
         code: Code.SUCCESS,
@@ -34,6 +36,10 @@ export default class SlideServices {
         }
       };
     }
+    return {
+      code: Code.SLIDE_NOT_FOUND,
+      message: '未找到该幻灯片'
+    };
   }
 
   public static async addNewSlide(slideInfo: ISlideInfo, uid: string) {
@@ -43,6 +49,7 @@ export default class SlideServices {
     const newSlide = Object.assign(new Slide(), {
       name: slideInfo.name,
       content: slideInfo.content,
+      cover: slideInfo.content[0].image || '',
       user
     });
     const slide = await SlideRepository.save(newSlide);
@@ -51,7 +58,7 @@ export default class SlideServices {
       code: Code.SUCCESS,
       message: '添加成功',
       data: {
-        slide
+        slide: newSlide
       }
     };
   }
@@ -72,29 +79,20 @@ export default class SlideServices {
     };
   }
 
-  public static async updateSlide(
-    id: string,
-    slideInfo: ISlideInfo,
-    uid: string
-  ) {
+  public static async updateSlide(id: string, slideInfo: ISlideInfo) {
     const SlideRepository = getManager().getRepository(Slide);
     const slide = await SlideRepository.createQueryBuilder('slide')
-      .leftJoinAndSelect('slide.user', 'user')
       .where('slide.id = :id', { id })
+      .addSelect('slide.content')
       .getOne();
 
     if (slide) {
-      if (slide.user.uid !== uid) {
-        return {
-          code: Code.PERMISSION_DENIED,
-          message: '权限不足'
-        };
-      }
       Object.assign(slide, {
+        cover: slideInfo.content[0].image || '',
         name: slideInfo.name,
         content: slideInfo.content
       });
-      delete slide.user;
+      await SlideRepository.save(slide);
       return {
         code: Code.SUCCESS,
         message: '更新成功',
@@ -102,11 +100,12 @@ export default class SlideServices {
           slide
         }
       };
-    } else
-      return {
-        code: Code.SLIDE_NOT_FOUND,
-        message: '未找到该幻灯片'
-      };
+    }
+
+    return {
+      code: Code.SLIDE_NOT_FOUND,
+      message: '未找到该幻灯片'
+    };
   }
 
   public static async publishSlide(id: string, uid: string, status: boolean) {

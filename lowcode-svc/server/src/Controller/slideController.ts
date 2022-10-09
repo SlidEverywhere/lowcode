@@ -29,8 +29,7 @@ export default class SlideController {
   public static async updateSlide(ctx: Context) {
     const id = ctx.params.id;
     const slideInfo = ctx.request.body;
-    const uid = ctx.state.user.uid;
-    const result = await SlideServices.updateSlide(id, slideInfo, uid);
+    const result = await SlideServices.updateSlide(id, slideInfo);
     ctx.body = result;
   }
 
